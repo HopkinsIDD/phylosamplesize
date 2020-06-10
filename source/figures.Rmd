@@ -1,0 +1,241 @@
+---
+title: <font size="5"> Main Text Figures</font>
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir="../")
+knitr::opts_chunk$set(fig.width=7.5, fig.height=6, fig.path='../figures/', warning=FALSE, message=FALSE,cache=FALSE,dev=c('png','pdf'))
+```
+
+```{r packages, echo=FALSE}
+
+# packages needed for analytical plots and heatmaps
+library(phylosamp)
+library(ggplot2)
+library(reshape2)
+library(grid)
+library(gridExtra)
+library(RColorBrewer)
+library(cowplot)
+library(viridis)
+library(metR)
+library(ROCR)
+library(R.utils)
+library(pbapply)
+
+# addtional packages needed for simulations and plots
+library(ape)
+library(outbreaker)
+library(dplyr)
+
+# load functions for running simulations
+source("source/sim_func.R")
+# load extra functions for plotting
+source("source/plot_func.R")
+
+# load table containing the density distribution of the mean number of generations between cases
+# for different values of R
+# the distribution is calculated from 1000 outbreak simulations given R and D, the number of generations
+# in these simulations, we use D=floor(ln(R)/ln(1000))
+# or the number of generations needed for a final outbreak size of approximately 1000 cases
+# to simulate mean distances for other combinations of R and D, see source/simDist.R
+mgd <- read.csv("data/sim_distance_dist.csv")
+
+```
+
+<br>
+
+##### **Figure 1.** Visual derivation of the probability of correctly identifying a true transmission pair
+
+![](../manuscript/Fig1.png)
+
+<br>
+
+##### **Figure 2.** Sample size and false discovery rate given single linkage and single transmission
+
+<br>
+
+##### A
+```{r plot_stsl, echo=FALSE, eval=TRUE}
+plt.fdr.pairs(chi = 0.999, eta = 0.9, rho.disc = c(0.01,0.05,0.25,0.50,0.75),
+       rho.cont = seq(0, 0.99, length.out = 100), M.disc = c(50,100,200,500,1000),
+       M.cont = seq(1,1000), assumption = "stsl")
+```
+
+##### B
+```{r heatmap_roc_stsl, echo=FALSE, eval=TRUE}
+# plot the heatmap for the single link single transmission scenario
+chi <- 1-10^(seq(log10(1-.999999), log10(1-0.9), length.out = 100))
+eta <- seq(0, 1, length.out = 100)
+plt.heatmap.fdr(chi,eta,rho=0.5,M=200,assumption="stsl")
+```
+
+<br>
+
+##### **Figure 3.** Sample size and false discovery rate given multiple linkage and multiple transmissions
+
+<br>
+
+##### A
+```{r plot_mtml, echo=FALSE, eval=TRUE}
+plt.fdr.pairs(chi = 0.999, eta = 0.9, rho.disc = c(0.01,0.05,0.25,0.50,0.75),
+       rho.cont = seq(0, 0.99, length.out = 100), M.disc = c(50,100,200,500,1000),
+       M.cont = seq(1,1000), R = 1, assumption = "mtml")
+```
+
+##### B
+```{r heatmap_roc_mtml, echo=FALSE, eval=TRUE}
+# plot the heatmap and the ROC curve together
+# to visualize maximum possible false discovery rate given a mutation rate
+chi <- 1-10^(seq(log10(1-.999999), log10(1-0.9), length.out = 100))
+eta <- seq(0, 1, length.out = 100)
+R0 <- 1
+# calculate the density distribution of the mean number of generations between cases given R
+mean_gens_pdf <- mgd[mgd["R"]==2][3:dim(mgd)[2]]
+plt.heatmap.fdr(chi,eta,rho=0.5,M=200,R=R0,assumption="mtml") +
+  geom_point(data=phylosamp::sens_spec_roc(cutoff=1:10,mut_rate=2,mean_gens_pdf=mean_gens_pdf),
+             aes(x=specificity,y=sensitivity,fill=NULL,z=NULL),
+             col="white", size=4)
+```
+
+<br>
+
+##### **Figure 4.** Determining the sensitivity and specificity of a genetic distance cutoff
+
+<br>
+
+```{r gendist_roc_sim, echo=FALSE, fig.width=7.5, fig.height=6, eval=TRUE}
+
+# plot genetic distance distribution from simulated outbreak
+# code used to simulate an outbreak
+  #sim_data <- true.outbreak(mu = 0.001, R = 2, D = 9, S = 100000, gen = c(0,1), 
+  #                          L = 1000, rimport = 0, dimport = 365, C = 70)
+  # save(sim_data,file=outbreak)
+plt.gendist.sim(outbreak = "data/exampleOutbreak.Rdata")
+
+```
+
+```{r gendist_roc_mut, echo=FALSE, fig.width=7.5, fig.height=6, eval=TRUE}
+
+# calculate the density distribution of the mean number of generations between cases given R
+# use R=2 to match simulated outbreak
+mean_gens_pdf <- mgd[mgd["R"]==2][3:dim(mgd)[2]]
+
+# make the plot
+# use mut_rate = 1 (0.001*genome length) to match simulated outbreak
+plt.gendist.mut(mut_rate = 1, mean_gens_pdf = mean_gens_pdf)
+
+```
+
+<br>
+
+##### **Figure 5.** Predicted versus observed false discovery rate in outbreak simulations
+
+<br>
+
+```{r fdr_vs_fdr_sim, echo=FALSE, eval=TRUE}
+
+# first time only: calculate tfdr from simulations and save to file
+#calc.tfdr(simdata="data/simdata_var_N10000",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
+#          sens_spec_method="sim",mgd=mgd,outdir="data/full_data_sim.Rdata")
+
+# plot fdr with sensitivity and specificity calculated from simulations
+plt.sim.data(simdata="data/full_data_sim.Rdata",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
+             filter_by=NA,filter_value=NA,
+             xparam="tfdr",yparam="fdr.sub",axis_labels=c("Theoretical FDR","Simulated FDR"))
+
+```
+
+<br>
+
+##### **Table 1.** Bias and error of false discovery rate for simulations with fixed sampling proportion
+
+```{r res_table_sim, echo=FALSE, fig.width=5.5, fig.height=5, eval=TRUE}
+
+# plot the bias from plot using simulated data
+bias_table_sim <- fdr.make.tables(saved_data="data/full_data_sim.Rdata",var="bias",
+                break_by="tfdr",row_breaks=c(0.0,0.25,0.5,0.75,1.0),
+                row_names=c("0-0.25","0.25-0.5","0.5-0.75","0.75-1"))
+
+# plot the error from plot using simulated data
+error_table_sim <- fdr.make.tables(saved_data="data/full_data_sim.Rdata",var="err",
+                break_by="tfdr",row_breaks=c(0.0,0.25,0.5,0.75,1.0),
+                row_names=c("0-0.25","0.25-0.5","0.5-0.75","0.75-1"))
+
+tbias <- textGrob("A (Bias)", gp=gpar(fontsize=12), hjust = 0)
+terror <- textGrob("B (Error)", gp=gpar(fontsize=12), hjust = 0)
+grid.arrange(tbias,tableGrob(bias_table_sim),terror,tableGrob(error_table_sim),nrow=4,heights=c(1,7,1,7))
+
+```
+
+<br>
+
+##### **Figure 6.** Validation of mutation rate method to calculate sensitivity and specificity
+
+```{r fdr_vs_fdr_mut, echo=FALSE, eval=TRUE}
+
+# first time only: calculate tfdr from simulations and save to file
+#calc.tfdr(simdata="data/simdata_var_N10000",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
+#          sens_spec_method="mutrate",mgd=mgd,outdir="data/full_data_mutrate.Rdata")
+
+# plot fdr with sensitivity and specificity calculated from simulations
+plt.sim.data(simdata="data/full_data_mutrate.Rdata",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
+             xparam="tfdr",yparam="fdr.sub",axis_labels=c("Theoretical FDR","Simulated FDR"))
+
+```
+
+<br>
+
+##### **Figure 7.** Effect of different generation distributions on specificity
+
+```{r sens_spec_main, echo=FALSE, eval=TRUE, fig.show = 'hide'}
+
+# first time only: calculate tfdr from simulations and save to file
+
+# load generation distribution data
+rho_values=c(0.1,0.25,0.5,0.75)
+mgd_list <- vector(mode = "list", length = 4)
+for (i in 1:4){
+  simpath <- paste("data/gendata_var_sim_N10000","_rho",as.character(100*rho_values[i]),".csv",sep="")
+  mgd_list[[i]] <- read.csv(simpath)
+  }
+
+#calc.tfdr(simdata="data/simdata_var_gen_N10000",rho_values=rho_values,max_sim_size=2000,
+#          sens_spec_method="mutrate",mgd=mgd_list,mgd_type="sim",outdir="data/full_data_mutrate_gens.Rdata")
+
+# plot sensitivity from mutrate data
+p_mutrate_sens <- plt.sim.data(simdata="data/full_data_mutrate.Rdata",rho_values=0.75,max_sim_size=2000,
+             xparam="t.eta",yparam="eta.full",include_titles=FALSE,
+             axis_labels=c("Theoretical Sensitivity","Simulated Sensitivity"))
+
+# plot specificity from gens data
+p_gens_sens <- plt.sim.data(simdata="data/full_data_mutrate_gens.Rdata",rho_values=0.75,max_sim_size=2000,
+             xparam="t.eta",yparam="eta.full",include_titles=FALSE,
+             axis_labels=c("Theoretical Sensitivity","Simulated Sensitivity"))
+
+# plot specificity from mutrate data
+p_mutrate_spec <- plt.sim.data(simdata="data/full_data_mutrate.Rdata",rho_values=0.75,max_sim_size=2000,
+             xparam="t.chi",yparam="chi.full",include_titles=FALSE,
+             axis_labels=c("Theoretical Specificity","Simulated Specificity"))
+
+# plot specificity from gens data
+p_gens_spec <- plt.sim.data(simdata="data/full_data_mutrate_gens.Rdata",rho_values=0.75,max_sim_size=2000,
+             xparam="t.chi",yparam="chi.full",include_titles=FALSE,
+             axis_labels=c("Theoretical Specificity","Simulated Specificity"))
+
+```
+
+```{r sens_spec_main_plot, echo=FALSE, fig.width=7.5, fig.height=5.5, eval=TRUE}
+
+# arrange the plots as desired for this figure
+grid.arrange(p_mutrate_sens,p_gens_sens,p_mutrate_spec,p_gens_spec,nrow=2)
+
+```
+
+
+```{r close_plots, echo=FALSE, results='hide'}
+
+dev.off()
+
+```
