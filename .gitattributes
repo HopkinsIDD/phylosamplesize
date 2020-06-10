@@ -1,0 +1,4 @@
+data/simdata_var_gen_N10000_rho10.csv filter=lfs diff=lfs merge=lfs -text
+data/simdata_var_gen_N10000_rho25.csv filter=lfs diff=lfs merge=lfs -text
+data/simdata_var_gen_N10000_rho50.csv filter=lfs diff=lfs merge=lfs -text
+data/simdata_var_gen_N10000_rho75.csv filter=lfs diff=lfs merge=lfs -text
