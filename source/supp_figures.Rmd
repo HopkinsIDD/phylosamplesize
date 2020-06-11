@@ -71,18 +71,18 @@ p1 <- grid.arrange(arrangeGrob(plots[[1]],left="R = 1.5"),plots[[2]],plots[[3]],
 R <- 1.5
 mut_rate <- 1
 
-mean_gens_pdf <- mgd[mgd["R"]==2][3:dim(mgd)[2]]
+mean_gens_pdf <- mgd[mgd["R"]==R][3:dim(mgd)[2]]
 plt.gendist.mut(mut_rate = mut_rate, mean_gens_pdf = mean_gens_pdf)
 
 ```
 
 ```{r gen_dist_compare_mev, echo=FALSE, fig.width=7.5, fig.height=6, eval=TRUE}
 
-# measles-like pathogen
-R <- 15
+# faster-spreading pathogen
+R <- 3
 mut_rate <- 0.2
 
-mean_gens_pdf <- mgd[mgd["R"]==2][3:dim(mgd)[2]]
+mean_gens_pdf <- mgd[mgd["R"]==R][3:dim(mgd)[2]]
 plt.gendist.mut(mut_rate = mut_rate, mean_gens_pdf = mean_gens_pdf)
 
 ```
