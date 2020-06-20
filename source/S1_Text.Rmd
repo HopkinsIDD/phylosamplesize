@@ -74,7 +74,7 @@ Under the assumptions above, we can show that:
 The probability spaces in Equation \ref{eq:simple_pr} above can also be represented by the conceptual diagram shown below:
 
 \begin{center}
-\includegraphics[width=\textwidth]{../manuscript/S1Text_Fig1.png}
+\includegraphics[width=\textwidth]{../Figures/S1Text_Fig1.png}
 \end{center}
 
 \subsection{Calculating the expected number of pairs in the sample}

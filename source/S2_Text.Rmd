@@ -34,7 +34,7 @@ The sensitivity and specificity of a criteria used to distinguish between linked
 If the genetic distance distribution for linked and unlinked cases is know, determining the sensitivity (the true positive rate) and specificity (the true negative rate) for a specific threshold is straightforward and can be visualized on the distributions below:
 
 \begin{center}
-\includegraphics[width=\textwidth]{../manuscript/S2Text_Fig1.png}
+\includegraphics[width=\textwidth]{../Figures/S2Text_Fig1.png}
 \end{center}
 
 Assuming the distributions are normalized such that the total area under each curve is equal to 1, the sensitivity is simply the portion of the genetic distance distribution for linked cases to the left of the threshold (cumulative distribution function (CDF) at this threshold), and the specificity is the portion of the genetic distance distribution for unlinked cases to the right of the threshold (1-CDF at this genetic distance threshold).
