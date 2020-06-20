@@ -485,7 +485,7 @@ plt.sim.data <- function(simdata,rho_values,max_sim_size,filter_by=NA,filter_val
             legend.key.size = unit(0.5,"cm"),
             legend.text = element_text(size = 8)) +
       geom_smooth(data = data_list[[i]] %>% arrange(M),
-                  aes(x = tfdr, y = fdr.sub),color="white",span=0.1) +
+                  aes(x = get(xparam), y = get(yparam)),color="white",span=0.1) +
       geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray70")
   }
   
