@@ -171,7 +171,7 @@ When perfect sensitivity is relaxed, we must account for both the uncertainty th
 The probability spaces in Equation \ref{eq:singletrans_singlelink_pr} above can also be represented by the conceptual diagram shown below:
 
 \begin{center}
-\includegraphics[width=\textwidth]{../manuscript/Fig1.png}
+\includegraphics[width=\textwidth]{../Figures/Fig1.png}
 \end{center}
 
 This derivation makes the implicit assumption that sensitivity is independent of both sample size and specificity ($M \perp \eta \perp \chi$). This is unlikely to be true in a real transmission scenario where case $i$ is closely related to multiple other cases, but allows us to approximate the probability an identified transmission link is true given our other assumptions.

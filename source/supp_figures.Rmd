@@ -33,7 +33,7 @@ mgd <- read.csv("data/sim_distance_dist.csv")
 
 ##### **Fig S1.** Estimating the average reproductive number in a population
 
-![](../manuscript/FigS1.png)
+![](../Figures/FigS1.png)
 
 <br>
 
