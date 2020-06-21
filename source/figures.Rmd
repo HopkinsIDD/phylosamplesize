@@ -48,7 +48,7 @@ mgd <- read.csv("data/sim_distance_dist.csv")
 
 ##### **Figure 1.** Visual derivation of the probability of correctly identifying a true transmission pair
 
-![](../manuscript/Fig1.png)
+![](../Figures/Fig1.png)
 
 <br>
 
@@ -204,16 +204,6 @@ for (i in 1:4){
 #calc.tfdr(simdata="data/simdata_var_gen_N10000",rho_values=rho_values,max_sim_size=2000,
 #          sens_spec_method="mutrate",mgd=mgd_list,mgd_type="sim",outdir="data/full_data_mutrate_gens.Rdata")
 
-# plot sensitivity from mutrate data
-p_mutrate_sens <- plt.sim.data(simdata="data/full_data_mutrate.Rdata",rho_values=0.75,max_sim_size=2000,
-             xparam="t.eta",yparam="eta.full",include_titles=FALSE,
-             axis_labels=c("Theoretical Sensitivity","Simulated Sensitivity"))
-
-# plot specificity from gens data
-p_gens_sens <- plt.sim.data(simdata="data/full_data_mutrate_gens.Rdata",rho_values=0.75,max_sim_size=2000,
-             xparam="t.eta",yparam="eta.full",include_titles=FALSE,
-             axis_labels=c("Theoretical Sensitivity","Simulated Sensitivity"))
-
 # plot specificity from mutrate data
 p_mutrate_spec <- plt.sim.data(simdata="data/full_data_mutrate.Rdata",rho_values=0.75,max_sim_size=2000,
              xparam="t.chi",yparam="chi.full",include_titles=FALSE,
@@ -226,10 +216,14 @@ p_gens_spec <- plt.sim.data(simdata="data/full_data_mutrate_gens.Rdata",rho_valu
 
 ```
 
-```{r sens_spec_main_plot, echo=FALSE, fig.width=7.5, fig.height=5.5, eval=TRUE}
+```{r sens_spec_main_plot, echo=FALSE, fig.width=7.5, fig.height=3, eval=TRUE}
 
 # arrange the plots as desired for this figure
-grid.arrange(p_mutrate_sens,p_gens_sens,p_mutrate_spec,p_gens_spec,nrow=2)
+lefttitle <- textGrob("Generation distribution: average", gp=gpar(fontsize=10,fontface="bold"))
+righttitle <- textGrob("Generation distribution: actual", gp=gpar(fontsize=10,fontface="bold"))
+grid.arrange(lefttitle,righttitle,
+             p_mutrate_spec,p_gens_spec,
+             nrow=2,heights=c(1,6))
 
 ```
 
