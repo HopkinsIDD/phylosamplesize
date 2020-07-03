@@ -1,0 +1,94 @@
+---
+editor_options:
+  chunk_output_type: console
+fontsize: 11pt
+output:
+  pdf_document:
+    includes:
+      in_header: preamble.tex
+    number_sections: yes
+  html_document:
+    df_print: paged
+documentclass: article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir="../")
+knitr::opts_chunk$set(fig.width=10, fig.height=8, fig.path='../figures/fig_data', warning=FALSE, message=FALSE,cache=FALSE)
+options(tinytex.verbose = TRUE)
+```
+
+\begin{Large}
+\textbf{S2 Text: Determining the sensitivity and specificity of genetic distance as a linkage criteria}
+\vspace{10px}
+\end{Large}
+
+\appendix
+
+<!-- PART A: DERIVATION OF THE MUTATION RATE BASED METHOD -->
+
+\section{Estimating sensitivity and specificity from pathogen-specific parameters}
+
+The sensitivity and specificity of a criteria used to distinguish between linked and unlinked infectious disease cases are key to determining the overall accuracy of this criteria. Here we estimate these parameters for a specific genetic distance threshold, i.e., the number of mutations between two pathogen sequences.
+
+If the genetic distance distribution for linked and unlinked cases is know, determining the sensitivity (the true positive rate) and specificity (the true negative rate) for a specific threshold is straightforward and can be visualized on the distributions below:
+
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/TextS2_Fig1.png}
+\end{center}
+
+Assuming the distributions are normalized such that the total area under each curve is equal to 1, the sensitivity is simply the portion of the genetic distance distribution for linked cases to the left of the threshold (cumulative distribution function (CDF) at this threshold), and the specificity is the portion of the genetic distance distribution for unlinked cases to the right of the threshold (1-CDF at this genetic distance threshold).
+
+The genetic distance distributions for linked and unlinked cases depend on the following:
+
+\begin{itemize}
+    \item[1.] The number of mutations that occur in one generation of pathogen transmission; we assume this is Poisson-distributed around the pathogen mutation rate, $\mu$, in mutations per genome per generation.
+    \item[2.] The distribution of the number of generations between all cases in the population.
+    \item[3.] The number of generations allowed between cases considered linked. When considering direct transmissions, only 1 generation of pathogen transmission can occur between linked cases.
+\end{itemize}
+
+\subsection{Deriving the genetic distance distribution for linked cases}
+
+To determine the genetic distance distribution for linked cases, we first consider the probability of observing a specific genetic distance, $d$ between two linked cases:
+
+\begin{align*}
+    &\sum_{i=1}^{g_\text{link}} \Pr\text{(cases are $i$ generations apart)}\cdot\Pr\text{(observing $d$ mutations $\mid$ cases are $i$ generations apart)}\\
+    = &\sum_{i=1}^{g_\text{link}}\text{g}(i)\cdot \text{f}(d;i\cdot\mu)
+\end{align*}
+
+where $g_{\text{link}}$ is the maximum number of generations between two linked cases.
+
+To ensure we obtain a proper distribution (i.e., the sum of these probabilities over all values of $d$ is equal to one), we must normalize each probability by the sum over all values of $d$:
+
+\begin{align*}
+    &\Pr\text{(linked cases are $d$ mutations apart)}=\\
+    &= \frac{1}{\sum_{d=0}^{\infty}\sum_{i=1}^{g_\text{link}}\text{g}(i)\cdot \text{f}(d;i\cdot\mu)}
+    \sum_{i=1}^{g_\text{link}}\text{g}(i)\cdot \text{f}(d;i\cdot\mu)\\
+    \intertext{because $\text{f}(d;i\cdot\mu)$ is probability density function of a Poisson distribution with mean $i\cdot\mu$, the sum of this expression over all values of $d$ is, by definition, one. Therefore, we can simplify this equation as follows:}
+    &= \frac{1}{\sum_{i=1}^{g_\text{link}}\text{g}(i)}
+    \sum_{i=1}^{g_\text{link}}\text{g}(i)\cdot \text{f}(d;i\cdot\mu)
+\end{align*}
+
+By evaluating the above expression for all values of $d$, we can obtain the complete genetic distance distribution for linked cases in the population, where cases are considered linked if they are separated by no more than $g_{\text{link}}$ generations.
+
+\subsection{Deriving the genetic distance distribution for unlinked cases}
+
+We repeat the derivation above for unlinked cases, this time summing from $g_{\text{link}}+1$ to $g_{\text{max}}$, the maximum number of generations considered:
+
+\begin{align*}
+    &\Pr\text{(unlinked cases are $d$ mutations apart)}=\\
+    &= \frac{1}{\sum_{i=g_{\text{link}}+1}^{g_\text{max}}\text{g}(i)}
+    \sum_{i=g_{\text{link}}+1}^{g_\text{max}}\text{g}(i)\cdot \text{f}(d;i\cdot\mu)
+\end{align*}
+
+<!-- PART B: SIMULATING THE GENETIC DISTANCE DISTRIBUTION -->
+
+\section{Simulating genetic distance distributions}
+
+As shown above, estimating sensitivity and specificity is straightforward once the genetic distance distributions of linked and unlinked cases are obtained. While the number of mutations per generation can reasonably be assumed to be Poisson-distributed, the Poisson distribution is not a good approximation for the distribution of generations between all cases in an infected population.
+
+Determining the distribution of the mean number of generations between cases is far from trivial. Through outbreak simulations, we determined that this distribution is highly dependent on the reproductive number $R$ of the pathogen and the number of generations of transmission $d$. Given these observations, we calculated the distribution empirically for values of R between 1.3 and 18 by performing 1000 outbreak simulations for each R and averaging the distribution of generations between case pairs over all simulations.
+
+We simulated outbreaks using the \textit{simOutbreak} function implemented in the outbreaker R package by Jombart et al. and each simulation was run for the number of generations needed to achieve a final outbreak size of approximately 1000 cases, since this was the number of generations used in simulations throughout this paper. As in other simulations described in \textbf{Methods}, we we assumed a large number of susceptible individuals in the population (n.hosts=100,000) and no importation events (single source outbreak). We also assumed every case transmitted their infection exactly one time step after infection (generation time = 1 time step).
+
+The resulting averaged generation distributions are available at [@github]. Since these simulations are time consuming, especially for low values of $R$ (which require a larger number of generations $d$ to achieve at least 1000 cases), we used these average results when calculating the sensitivity and specificity using the mutation rate method, and provide them for others wishing to conduct similar analyses. We also note that, for a single source outbreak, the maximum possible interesting value of $g_\text{max}$ is $2d$. Therefore, all distributions include probabilities for distance between cases of up to 52 generations, which is two times the number of generations (26) used in outbreak simulations for $R=1.3$.

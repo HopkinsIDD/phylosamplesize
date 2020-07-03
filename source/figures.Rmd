@@ -5,7 +5,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_knit$set(root.dir="../")
-knitr::opts_chunk$set(fig.width=7.5, fig.height=6, fig.path='../figures/', warning=FALSE, message=FALSE,cache=FALSE,dev=c('png','pdf'))
+knitr::opts_chunk$set(fig.width=7.5, fig.height=6, fig.path='../figures/fig_data/', warning=FALSE, message=FALSE,cache=FALSE,dev=c('png','pdf'))
 ```
 
 ```{r packages, echo=FALSE}
@@ -48,7 +48,7 @@ mgd <- read.csv("data/sim_distance_dist.csv")
 
 ##### **Figure 1.** Visual derivation of the probability of correctly identifying a true transmission pair
 
-![](../Figures/Fig1.png)
+![](../figures/Fig1.png)
 
 <br>
 
