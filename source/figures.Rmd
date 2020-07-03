@@ -94,7 +94,7 @@ R0 <- 1
 # calculate the density distribution of the mean number of generations between cases given R
 mean_gens_pdf <- mgd[mgd["R"]==2][3:dim(mgd)[2]]
 plt.heatmap.fdr(chi,eta,rho=0.5,M=200,R=R0,assumption="mtml") +
-  geom_point(data=phylosamp::sens_spec_roc(cutoff=1:10,mut_rate=2,mean_gens_pdf=mean_gens_pdf),
+  geom_point(data=phylosamp::sens_spec_roc(cutoff=1:10,mut_rate=1,mean_gens_pdf=mean_gens_pdf),
              aes(x=specificity,y=sensitivity,fill=NULL,z=NULL),
              col="white", size=4)
 ```

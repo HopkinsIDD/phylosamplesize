@@ -162,7 +162,7 @@ plt.heatmap.fdr <- function(chi,eta,rho,M,R=NULL,assumption){
   
   p + geom_raster(aes(fill = FDR), hjust=0, vjust=0.2, interpolate=FALSE) + 
     scale_x_log10(limits = c(0.00001,0.1), expand = c(0.005,0)) +
-    scale_y_continuous(limits = c(0,1), expand = c(0.005, 0)) +
+    scale_y_continuous(limits = c(0,1.01), expand = c(0.005, 0)) +
     scale_fill_viridis(begin = 0.1, end = 0.8, direction = -1, limits = c(0,1),
                        breaks = c(0.0,0.25,0.5,0.75,1.0), labels = c("0.0",0.25,0.5,0.75,"1.0")) +
     geom_contour(aes(z = FDR), color='black', size=0.2, alpha = 0.5) +
