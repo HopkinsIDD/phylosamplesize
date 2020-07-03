@@ -14,6 +14,7 @@ knitr::opts_chunk$set(fig.width=7.5, fig.height=6, fig.path='../figures/fig_data
 library(phylosamp)
 library(ggplot2)
 library(reshape2)
+library(dplyr)
 library(grid)
 library(gridExtra)
 library(RColorBrewer)
@@ -207,23 +208,25 @@ for (i in 1:4){
 # plot specificity from mutrate data
 p_mutrate_spec <- plt.sim.data(simdata="data/full_data_mutrate.Rdata",rho_values=0.75,max_sim_size=2000,
              xparam="t.chi",yparam="chi.full",include_titles=FALSE,
-             axis_labels=c("Theoretical Specificity","Simulated Specificity"))
+             axis_labels=c("Theoretical specificity","Simulated specificity"))
 
 # plot specificity from gens data
 p_gens_spec <- plt.sim.data(simdata="data/full_data_mutrate_gens.Rdata",rho_values=0.75,max_sim_size=2000,
              xparam="t.chi",yparam="chi.full",include_titles=FALSE,
-             axis_labels=c("Theoretical Specificity","Simulated Specificity"))
+             axis_labels=c("Theoretical specificity","Simulated specificity"))
 
 ```
 
 ```{r sens_spec_main_plot, echo=FALSE, fig.width=7.5, fig.height=3, eval=TRUE}
 
 # arrange the plots as desired for this figure
-lefttitle <- textGrob("Generation distribution: average", gp=gpar(fontsize=10,fontface="bold"))
-righttitle <- textGrob("Generation distribution: actual", gp=gpar(fontsize=10,fontface="bold"))
-grid.arrange(lefttitle,righttitle,
-             p_mutrate_spec,p_gens_spec,
-             nrow=2,heights=c(1,6))
+Alabel <- textGrob("A", gp=gpar(fontsize=10,fontface="bold"),hjust=-0.1)
+Blabel <- textGrob("B", gp=gpar(fontsize=10,fontface="bold"),hjust=-0.1)
+lefttitle <- textGrob("Generation distribution: average", gp=gpar(fontsize=10,fontface="bold"),hjust=0.55)
+righttitle <- textGrob("Generation distribution: actual", gp=gpar(fontsize=10,fontface="bold"),hjust=0.55)
+titles <- arrangeGrob(Alabel,lefttitle,Blabel,righttitle,ncol=4,widths=c(1,18,1,18))
+plots <- arrangeGrob(p_mutrate_spec,p_gens_spec,ncol=2)
+grid.arrange(titles,plots,nrow=2,heights=c(1,6))
 
 ```
 
