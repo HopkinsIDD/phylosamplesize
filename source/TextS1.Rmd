@@ -18,14 +18,22 @@ knitr::opts_chunk$set(fig.width=10, fig.height=8, fig.path='../figures/fig_data'
 options(tinytex.verbose = TRUE)
 ```
 
+\pagestyle{fancy}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot{}
+\fancyfoot[R]{\thepage}
+
 \begin{Large}
-\textbf{S1 Text: Deriving probability of transmission given linkage}
+\textbf{Supplementary Text 1}\vspace{4px}
+\newline
+Deriving probability of transmission given linkage
 \vspace{10px}
 \end{Large}
 
-We begin by defining two matrices containing binary response variables. The first matrix $\mathbf Y$ contains the variable $y_{ij}$, which indicates that case $i$ and case $j$ are linked through a direct transmission event (i.e., case $i$ infected case $j$ or vice versa). Matrix $\mathbf{Y}$ has dimensions $N \times N$, where $N$ is the population (i.e., final outbreak) size. The second matrix $\mathbf{Z}$ contains the variable $z_{ij}$, which indicates inferred linkage between cases $i$ and $j$ based on some phylogenetic criteria. Matrix $\mathbf{Z}$ has dimensions $M \times M$, where $M$ is the sample size and $M \subset N$.
+We begin by defining two matrices containing binary response variables. The first matrix $\mathbf Y$ contains the variable $y_{ij}$, which indicates that infection $i$ and infection $j$ are linked through a direct transmission event (i.e., $i$ infected $j$ or vice versa). Matrix $\mathbf{Y}$ has dimensions $N \times N$, where $N$ is the population (i.e., final outbreak) size. The second matrix $\mathbf{Z}$ contains the variable $z_{ij}$, which indicates inferred linkage between infections $i$ and $j$ based on some phylogenetic criteria. Matrix $\mathbf{Z}$ has dimensions $M \times M$, where $M$ is the sample size and $M \subset N$.
 
-Our aim is to determine the quantity $\Pr (y_{ij} \mid z_{ij})$, which is defined as the probability that case $i$ is linked by transmission to case $j$ (a true transmission pair), given that they have been linked by some phylogenetic criteria. We start by making a number of assumptions that simplify the derivation, and will in turn relax these assumptions to arrive at the equations in the main text.
+Our aim is to determine the quantity $\Pr (y_{ij} \mid z_{ij})$, which is the probability that infection $i$ is linked by transmission to infection $j$ (making $i$ and $j$ a true transmission pair), given that they have been linked by some phylogenetic criteria. We start by making a number of assumptions that simplify the derivation, and we relax each of these assumptions in turn.
 
 \appendix
 
@@ -38,9 +46,9 @@ Our aim is to determine the quantity $\Pr (y_{ij} \mid z_{ij})$, which is define
 
 We make the following simplifying assumptions:
 \begin{itemize}
-    \item[1.] Each case $i$ is linked by transmission to only one other case $j$ in the population (N).
-    \item[2.] Each case $i$ is linked by the linkage criteria to only one other case $j$ in the sampled population (M).
-    \item[3.] The sensitivity of the linkage criteria is equal to 1 when both the infector and infectee have been sampled. In other words, if case $i$ is truly linked by transmission to case $j$ and both cases are found in sample $M$, then $y_{ij} = 1$ by definition, and under perfect sensitivity $z_{ij} = 1$ as well.
+    \item[1.] Each infection $i$ is linked by transmission to only one other infection $j$ in the population (N).
+    \item[2.] Each infection $i$ is linked by the linkage criteria to only one other infection $j$ in the sampled population (M).
+    \item[3.] The sensitivity of the linkage criteria is equal to 1 when both the infector and infectee have been sampled. If infection $i$ is truly linked by transmission to infection $j$ and both infections are found in sample $M$, then $y_{ij} = 1$ by definition. Under this assumption of perfect sensitivity, $z_{ij} = 1$ as well.
 \end{itemize}
 
 \subsection{Derivation of the probability of transmission given linkage}
@@ -49,7 +57,7 @@ Under the assumptions above, we can show that:
 
 \begin{align*} \label{eq:simple_pr}
     \Pr(\y \mid \z) &= \frac{\Pr(\y, \z)}{\Pr(\z)} = \frac{\Pr(\y, \z)}{\Pr(\y, \z) + \Pr(\neg\y, \z)}\\[10pt]
-    \intertext{However, we must also account for the uncertainty that, for any sampled case $i$, its true transmission pair is in the sample. So we define define $S_i$ as the probability that the true pair of case $i$ has been sampled from the population $N$ and apply the law of total probability accordingly:}
+    \intertext{However, we must also account for the uncertainty of sampling the true transmission partner of $i$ (the infection directly linked to $i$ by transmission, i.e., either its infector or infectee). We define define $S_i$ as the probability that the true transmission partner of $i$ has been sampled from the population $N$ and apply the law of total probability accordingly:}
     &= \frac{
     \cancelto{1}{\Pr(\y, \z\mid S_i)}\Pr(S_i) + \cancelto{0}{\Pr(\y, \z\mid \neg S_i)}\Pr(\neg S_i)
     }{
@@ -62,8 +70,8 @@ Under the assumptions above, we can show that:
     \intertext{We know that $\Pr(S_i)$ is equal to the sampling fraction \big($\frac{M}{N}$\big),
     which we define as $\rho$:}
     &= \frac{\rho}{\rho + \Pr(\neg\y, \z\mid \neg S_i)(1-\rho)}\\[10pt]
-    \intertext{The term $\Pr(\neg\y, \z\mid \neg S_i)$ is the probability that case $i$ is linked to case $j$ 
-    when $i$ is not the true pair of $j$ and the true pair of $j$ is not in the sample $M$. Given our assumption that each case is linked to exactly one other case by the phylogenetic criteria, the probability of this (incorrect) link between cases $i$ and $j$ is equal the probability that the remaining $M-1$ other possible (incorrect) links do not occur, which can be written as $(1-\chi^{M-1})$, where $\chi$ is the specificity of the linkage criteria:}
+    \intertext{The term $\Pr(\neg\y, \z\mid \neg S_i)$ is the probability that $i$ is linked to $j$ 
+    when infection $i$ is not the true transmission partner of $j$, given that the true partner of $i$ is not in the sample $M$. Given our assumption that each infection is linked to exactly one other infection by the phylogenetic criteria, the probability of this (incorrect) link between infections $i$ and $j$ is equal the probability that the remaining $M-1$ other possible (incorrect) links do not occur, which can be written as $(1-\chi^{M-1})$, where $\chi$ is the specificity of the linkage criteria:}
     &= \frac{\rho}{\rho + (1-\chi^{M-1})(1-\rho)}\\[10pt]
     \intertext{\textbf{Therefore, the probability of transmission given linkage assuming perfect sensitivity, 
     single transmission, and single linkage is:}}
@@ -71,7 +79,7 @@ Under the assumptions above, we can show that:
     \stepcounter{equation}\tag{\theequation}\\[10pt]
 \end{align*}
 
-The probability spaces in Equation \ref{eq:simple_pr} above can also be represented by the conceptual diagram shown below:
+The probability spaces in Equation \ref{eq:simple_pr} above can also be represented by the conceptual diagram below:
 
 \begin{center}
 \includegraphics[width=\textwidth]{../figures/TextS1_Fig1.png}
@@ -83,14 +91,14 @@ $$
 \mathbb{E}[\text{number of true pairs}] = 
 \mathbb{E}[\text{Number of pairs observed}] \times \Pr(\text{a pair is true}).
 $$
-We have defined $\rho$ as the probability of selecting any individual from the population $N$. Therefore, if we assume a large population size, the probability of sampling both case $i$ and its true pair is equal to $\rho^2$. Under our first assumption---that case $i$ is linked by transmission to only one other case $j$---the total number of pairs in the population is equal to $\frac{N}{2}$. We also know that $\rho=\frac{M}{N}$, so the total number of true transmission pairs in the sample is:
+We have defined $\rho$ as the probability of selecting any individual from the population $N$. Therefore, if we assume a large population size, the probability of sampling both infection $i$ and its true transmission partner is equal to $\rho^2$. Under our first assumption---that $i$ is linked by transmission to only one other infection $j$---the total number of pairs in the population is equal to $\frac{N}{2}$. We also know that $\rho=\frac{M}{N}$, so the total number of true transmission pairs in the sample is:
 
 \begin{equation}
     \mathbb{E}[\text{number of true pairs}] = \rho ^2 \times \frac{N}{2} = \rho ^2 \times \frac{1}{2}\frac{M}{\rho} = \frac{M}{2}\rho
     \label{eq:simple_truepairs}
 \end{equation}
 
-We know from Equation \ref{eq:simple_pr} the probability that an observed pair indicates a true transmission pairs, so we can divide the number of true pairs by this quantity to get the expected number of observed pairs:
+Rearranging and substituting Equation \ref{eq:simple_pr} for $\Pr(\text{a pair is true})$:
 
 \begin{align*}\label{eq:simple_obspairs}
     \mathbb{E}[\text{number of pairs observed}] 
@@ -107,8 +115,8 @@ We know from Equation \ref{eq:simple_pr} the probability that an observed pair i
 Under our simplifying assumptions, Equation \ref{eq:simple_obspairs} reveals two important principles:
 
 \begin{itemize}
-\item[1.] The quantity $\mathbb{E}[\text{number of pairs observed}]$ increases more rapidly than $\mathbb{E}[\text{number of true pairs}]$ as $M$ is increased. Therefore, the false discovery rate increases as $M$ increases, all else being equal.
-\item[2.] Both quantities $\mathbb{E}[\text{number of pairs observed}]$ and $\Pr (y_{ij} \mid z_{ij})$ will be highly dependent on the value of $\chi$, the specificity of the linkage criteria.
+\item[1.] The quantity $\mathbb{E}[\text{number of pairs observed}]$ increases more rapidly than $\mathbb{E}[\text{number of true pairs}]$ as $M$ increases. Therefore, the false discovery rate increases as $M$ increases, all else being equal.
+\item[2.] Both $\mathbb{E}[\text{number of pairs observed}]$ and $\Pr (y_{ij} \mid z_{ij})$ are highly dependent on the value of $\chi$, the specificity of the linkage criteria.
 \end{itemize}
 
 \newpage
@@ -119,16 +127,16 @@ Under our simplifying assumptions, Equation \ref{eq:simple_obspairs} reveals two
 
 \subsection{Assumptions}
 
-In this section, we preserve the first two assumptions from Appendix \ref{section:simple} and relax our assumption of perfect sensitivity when case $i$ and its true transmission pair are both in the sample. Our remaining assumptions are:
+In this section, we preserve the first two assumptions from the prior section and relax our assumption of perfect sensitivity. Our remaining assumptions are:
 
 \begin{itemize}
-    \item[1.] Each case $i$ is linked by transmission to only one other case $j$ in the population (N).
-    \item[2.] Each case $i$ is linked by the linkage criteria to only one other case $j$ in the sampled population (M).
+    \item[1.] Each infection $i$ is linked by transmission to only one other infection $j$ in the population (N).
+    \item[2.] Each infection $i$ is linked by the linkage criteria to only one other infection $j$ in the sampled population (M).
 \end{itemize}
 
 \subsection{Derivation of the probability of transmission given linkage}
 
-When perfect sensitivity is relaxed, we must account for both the uncertainty that the true pair of case $i$ is in sample $M$ and the uncertainty that we correctly identify this pairing when both cases are in the sample. Thus we rewrite Equation \ref{eq:simple_pr} with additional terms to account for the increased number of potential outcomes.
+When perfect sensitivity is relaxed, we must account for both the uncertainty that the true transmission partner of $i$ is in sample $M$ and the uncertainty that we correctly identify this pairing when both infections are sampled. Thus, we rewrite Equation \ref{eq:simple_pr} with additional terms to account for the increased number of potential outcomes.
 
 \begin{align*} \label{eq:singletrans_singlelink_pr}
     \Pr(\y \mid \z) &= \frac{\Pr(\y, \z)}{\Pr(\z)} = \frac{\Pr(\y, \z)}{\Pr(\y, \z) + \Pr(\neg\y, \z)}\\[10pt]
@@ -146,19 +154,15 @@ When perfect sensitivity is relaxed, we must account for both the uncertainty th
     \Pr(\y, \z\mid S_i)\Pr(S_i) + \Pr(\neg\y, \z\mid S_i)\Pr(S_i) + \Pr(\neg\y, \z\mid \neg S_i)\Pr(\neg S_i)
     }\\[10pt]
     \intertext{The specificity of the linkage criteria (defined here as $\eta$) is the probability 
-    that a link is correctly identified between case $i$ and its true infector when both are in the sample $M$,
-    or $\Pr(\y, \z\mid S_i)$. Substituting this and the previously-defined $\Pr(S_i)=\rho$, we get:}
+    that a link is correctly identified between infection $i$ and its true transmission partner when both are
+    in the sample, or $\Pr(\y, \z\mid S_i)$. Substituting this and the previously-defined $\Pr(S_i)=\rho$, we 
+    get:}
     &= \frac{
     \eta\rho
     }{
     \eta\rho + \Pr(\neg\y, \z\mid S_i)\rho + \Pr(\neg\y, \z\mid \neg S_i)(1-\rho).
     }\\[10pt]
-    \intertext{We know that $\Pr(\neg\y, \z\mid S_i)$ is the probability that the true pair of case $i$ is in the sample $M$, but that it is linked by the linkage criteria to exactly one other sample $j$ that is not its true infector. In this instance, the linkage criteria must avoid inferring $M-2$ other incorrect links ($\Pr=1-\chi^{M-2}$) and as well as avoid inferring a link with the true infector of case $i$ ($\Pr=1-\eta$). Because in this derivation we again assume that each caseis linked to exactly one other, avoiding linkage with these other cases implies that case $i$ is linked to the remaining case in the sample (in this case, not its true pair). If the true pair of $i$ is not in the sample \big($\Pr(\neg\y, \z\mid \neg S_i)$\big), the probability of linking $i$ to one other sample that is not its true infector is simply $1-\chi^{M-1}$, as previously defined:}
-    &= \frac{
-    \eta\rho
-    }{
-    \eta\rho + (1-\chi^{M-2})(1-\eta)\rho + (1-\chi^{M-1})(1-\rho)
-    }\\[10pt]
+    \intertext{We know that $\Pr(\neg\y, \z\mid S_i)$ is the probability that the true partner of infection $i$ is in the sample $M$, but that $i$ is incorrectly linked to $j$, an infection that is not its true transmission partner. This is expressed as the probability of $i$ not being linked to its true (sampled) transmission partner ($1-\eta$) or any of the $M-2$ other sampled infections ($1-\chi^{M-2}$). In this derivation, we again assume that each infection is linked to exactly one other, so avoiding linkage with all other sampled infections implies that $i$ is linked to the remaining infection $j$ (in this case, not its true transmission partner). If the true partner of $i$ is not in the sample \big($\Pr(\neg\y, \z\mid \neg S_i)$\big), the probability of linking $i$ to one other sampled infection that is not its true partner is simply $1-\chi^{M-1}$, as previously defined.}
     \intertext{\textbf{Therefore, the probability of transmission given linkage 
     assuming single transmission and single linkage is:}}
     \Pr(\y \mid \z) &= \frac{
@@ -168,13 +172,13 @@ When perfect sensitivity is relaxed, we must account for both the uncertainty th
     }
     \stepcounter{equation}\tag{\theequation}\\[10pt]
 \end{align*}
-The probability spaces in Equation \ref{eq:singletrans_singlelink_pr} above can also be represented by the conceptual diagram shown below:
+The probability spaces in Equation \ref{eq:singletrans_singlelink_pr} above can also be represented by the conceptual diagram below:
 
 \begin{center}
 \includegraphics[width=\textwidth]{../figures/Fig1.png}
 \end{center}
 
-This derivation makes the implicit assumption that sensitivity is independent of both sample size and specificity ($M \perp \eta \perp \chi$). This is unlikely to be true in a real transmission scenario where case $i$ is closely related to multiple other cases, but allows us to approximate the probability an identified transmission link is true given our other assumptions.
+This derivation makes the implicit assumption that sensitivity is independent of both sample size and specificity ($M \perp \eta \perp \chi$). This is unlikely to be true in a real transmission scenario where infection $i$ is closely related to multiple other infections, but allows us to approximate the probability that an identified transmission link is true given our other assumptions.
 
 \subsection{Calculating the expected number of pairs in the sample}
 We now re-write Equation \ref{eq:simple_truepairs} with the sensitivity assumption relaxed:
@@ -184,7 +188,7 @@ We now re-write Equation \ref{eq:simple_truepairs} with the sensitivity assumpti
     = \eta\rho ^2 \times \frac{1}{2}\frac{M}{\rho} = \frac{M}{2}\eta\rho
 \end{equation}
 
-Where the probability that a pair is in the sample is still $\rho^2$ but we must include the probability of that pair being correctly linked by the linkage criteria, $\eta$. We can again calculate the expected number of pairs observed, this time incorporating $\eta$:
+Where the probability that an infection and its transmission partner are both in the sample is still $\rho^2$, but we must now also include the probability of that pair being correctly identified by the linkage criteria, $\eta$. We can again calculate the expected number of pairs observed, this time incorporating the sensitivity:
 
 \begin{align*}\label{eq:singletrans_singlelink_obspairs}
     \mathbb{E}[\text{number of pairs observed}] 
@@ -199,22 +203,22 @@ Where the probability that a pair is in the sample is still $\rho^2$ but we must
     \stepcounter{equation}\tag{\theequation}
 \end{align*}
 
-As before (see Equation \ref{eq:simple_obspairs}), when all other parameters are held constant, the false discovery rate will increase as the sample size $M$ increases because the number of observed pairs increases more rapidly than the number of true pairs. Further, with imperfect sensitivity, increasing the sample size $M$ has an even more substantial effect (due to an additional term containing 1-$\chi^M$) on the expected number of pairs observed than before, thus more quickly increasing the false discovery rate.
+As before (see Equation \ref{eq:simple_obspairs}), when all other parameters are held constant, the false discovery rate will increase as the sample size $M$ increases. This is because the number of observed pairs increases more rapidly than the number of true pairs. Further, with imperfect sensitivity, increasing the sample size $M$ has an even more substantial effect (due to an additional term containing 1-$\chi^M$) on the expected number of pairs observed than before, thus more quickly increasing the false discovery rate.
 
 \newpage
 
-<!-- RELAXING SINGLE TRANSMISSION -->
+<!-- APPENDIX C: RELAXING SINGLE TRANSMISSION -->
 
 \section{Relaxing the assumption of single transmission pairs}
 
 \subsection{Assumptions}
 
-Thus far, we have assumed that every case $i$ has been connected by transmission to exactly one other case; in other words, that $i$ is either an infector or infectee, but not both. During an outbreak where a pathogen has a reproductive number $R$ of greater than $1$, it is likely that each infector will have multiple infectees. Therefore, we relax the single transmission assumption and calculate the probability of correctly identifying a true link given that $i$ has transmitted to $R$ other individuals in the population. However, we maintain that each individual has been infected by exactly one other individual, i.e., that multiple infections are not possible. Therefore, each case $i$ has on average $R+1$ true links, and we define $k$ as the number of these true links of case $i$ that are in the sample $M$.
+Thus far, we have assumed that every infection $i$ has been connected by transmission to exactly one other infection; in other words, that $i$ is either an infector or infectee, but not both. However, we are often interested in capturing all transmission partners of $i$, including its infector and all infectees. Therefore, we relax the single transmission assumption and calculate the probability of correctly identifying a true pair given that $i$ has transmitted to $R$ (the pathogen reproductive number) other individuals in the population. However, we maintain that each individual has been infected by exactly one other individual, i.e., that multiple infections are not possible. Therefore, each infection $i$ has on average $R+1$ true transmission partners, and we define $k$ as the number of these true partners that are in the sample $M$.
 
 As a result, we remain with just one of our original assumptions:
 
 \begin{itemize}
-    \item[1.] Each case $i$ is linked by the linkage criteria to only one other case $j$ 
+    \item[1.] Each infection $i$ is linked by the linkage criteria to only one other infection $j$ 
     in the sampled population (M).
 \end{itemize}
 
@@ -223,32 +227,31 @@ As a result, we remain with just one of our original assumptions:
 
 \textit{Derivation for a given value of} k
 
-If there are $k$ individuals in sample $M$ that are truly linked with case $i$, then the probability of true transmission linkage given the outcome of the linkage criteria and number of links $k$ is:
+If there are $k$ individuals in sample $M$ that are true transmission partners of infection $i$, then the probability an identified link is true given that any infection $i$ has $k$ sampled transmission partners is:
 
 \begin{align*} \label{eq:singlelink_pr_k}
     \Pr(\y \mid \z, k) &= \frac{\Pr(\y, \z, k)}{\Pr(\z, k)}\\[10pt]
     &= \frac{\Pr(\y, \z, k)}{\Pr(\y, \z, k) + \Pr(\neg\y, \z, k)}\\[10pt]
     &= \frac{\Pr(\y, \z \mid k)\Pr(k)}{\Pr(\y, \z \mid k)\Pr(k) + \Pr(\neg\y, \z \mid k)\Pr(k)}\\[10pt]
     &= \frac{\Pr(\y, \z \mid k)}{\Pr(\y, \z \mid k) + \Pr(\neg\y, \z \mid k)}\\[10pt]
-    \intertext{We can show that is the probability that case $i$ is not linked any of its $k$
-    true links is $(1-\eta)^k$, so the probability that case $i$ is linked to at least one of 
-    its $k$ true links in the sample is $1-(1-\eta)^k$. Because we still assume that the linkage
-    criteria will identify exactly one link for each case $i$, this is equivalent to the 
+    \intertext{We can show that the probability that infection $i$ is not linked (by the linkage citeria) to 
+    any of its $k$ true partners is $(1-\eta)^k$, so the probability that infection $i$ is linked to at least
+    one of its $k$ true partners in the sample is $1-(1-\eta)^k$. Because we still assume that the linkage
+    criteria will identify exactly one link for each infection $i$, this is equivalent to the 
     probability $\Pr(\y, \z \mid k)$:}
     &= \frac{[1-(1-\eta)^k]}{[1-(1-\eta)^k]+\Pr(\neg\y, \z \mid k)}\\[10pt]
-    \intertext{Similarly, the probability that case $i$ is incorrectly linked to another case
-    is the probability it is not linked to any of its true infectees ($(1-\eta)^k$) times the
-    probability of not linking to any of the other incorrect links ($1-\chi^{M-1-k}$):}
-    &= \frac{[1-(1-\eta)^k]}{[1-(1-\eta)^k]+(1-\eta)^k(1-\chi^{M-1-k})}\\[15pt]
-    \intertext{\textbf{Therefore, the probability of transmission given linkage 
-    assuming single linkage is:}}
-    \Pr(\y \mid \z) &= \frac{[1-(1-\eta)^k]}{[1-(1-\eta)^k]+(1-\eta)^k(1-\chi^{M-1-k})}
+    \intertext{Similarly, the probability that infection $i$ is incorrectly linked to another infection
+    is the probability it is not linked to any of its true partners ($(1-\eta)^k$) times the
+    probability of not linking to any of the other sampled infections ($1-\chi^{M-1-k}$).}
+    \intertext{\textbf{Therefore, the probability of transmission given linkage, assuming $k$ sampled partners 
+    and single linkage is:}}
+    \Pr(\y \mid \z,k) &= \frac{[1-(1-\eta)^k]}{[1-(1-\eta)^k]+(1-\eta)^k(1-\chi^{M-1-k})}
     \stepcounter{equation}\tag{\theequation}\\[10pt]
 \end{align*}
 
 \textit{Derivation for all possible values of $k$}
 
-We can extend Equation \ref{eq:singlelink_pr_k} to include all possible values of $k$ for a given case $i$:
+We can extend Equation \ref{eq:singlelink_pr_k} to include all possible values of $k$ for a given infection $i$:
 
 \begin{equation} 
     \begin{aligned}\label{eq:singlelink_pr_sum}
@@ -267,7 +270,7 @@ We can extend Equation \ref{eq:singlelink_pr_k} to include all possible values o
     \end{aligned}
 \end{equation}
 
-As a check on the formulation of Equation \ref{eq:singlelink_pr_sum}, let there be only one true transmission link for case $i$. In this instance, $k=1$ occurs with probability $\rho$ (the probability that this single link is in the sample) and $k=0$ with probability $1-\rho$:
+As a check on the formulation of Equation \ref{eq:singlelink_pr_sum}, let there be only one true transmission partner for infection $i$. In this instance, $k=1$ occurs with probability $\rho$ (the probability that this single partner is in the sample) and $k=0$ occurs with probability $1-\rho$:
 
 \begin{equation}
     \begin{aligned}
@@ -292,7 +295,7 @@ As a check on the formulation of Equation \ref{eq:singlelink_pr_sum}, let there 
     \end{aligned}
 \end{equation}
 
-This result is equivalent to Equation \ref{eq:singletrans_singlelink_pr} above, which was also derived under the assumption that each case $i$ is truly linked by transmission to exactly one other case.
+This result is equivalent to Equation \ref{eq:singletrans_singlelink_pr} above, which was also derived under the assumption that each infection $i$ is truly connected by transmission to exactly one other infection.
 
 \textbf{Therefore, we can conclude that the probability of transmission given linkage, 
 assuming single linkage and for all possible values of $k$ transmission links in the sample, is:}
@@ -304,9 +307,9 @@ assuming single linkage and for all possible values of $k$ transmission links in
 
 \textit{Derivation if $k$ is poisson-distributed}
 
-In an infectious disease outbreak, it may be difficult or impossible to know the true number of transmission links in the sample ($k$) for any given case. Therefore, we use the population average for the number of secondary cases, which we define here are $R_{pop}$. Note that we use $R_{pop}$ instead of the traditional $R_e$ because $R_e$ has a specific meaning with regards to disease susceptibility in the population, and here we mean the average number of secondary cases of each case in a finite population. As discussed in the main text, in practice $R_{pop}$ is always less than one.
+In an infectious disease outbreak, it may be difficult or impossible to know the true number of transmission partners in the sample for any given infection. Therefore, we use the population average for the number of secondary infections, which we define here are $R_{\text{pop}}$. Note that we use $R_{\text{pop}}$ instead of the traditional $R_e$ because $R_e$ has a specific meaning with regards to disease susceptibility in the population, and here we mean the average number of secondary infections of each infection in a finite population. As discussed in the main text, in practice $R_{\text{pop}}$ is always less than one.
 
-We draw $k$ from a Poisson distribution with mean $\lambda = \rho(R_{pop} + 1)$. Here, $R_{pop}+1$ is the total number of transmission links for a given sample $i$; we add one because case $i$ is linked to the $R_{pop}$ individuals he/she infects as well as to his/her infector (note that multiple infections are not allowed under the assumption that each case is infected by exactly one individual). We multiply by $\rho$ to account for the probability that each of these true transmission links is actually observed in the sample.
+We draw $k$ from a Poisson distribution with mean $\lambda = \rho(R_{\text{pop}} + 1)$. Here, $R_{\text{pop}}+1$ is the total number of transmission links for a given sampled infection $i$; we add one because infection $i$ is linked to the $R_{\text{pop}}$ individuals he/she infects as well as to his/her infector (note that multiple infections are not allowed under the assumption that each infected individual is infected by exactly one individual). We multiply by $\rho$ to account for the probability that each of these true transmission partners is actually included in the sample.
 
 We incorporate the Poisson representation of the number of true transmission links in the sample with the Poisson probability density function:
 
@@ -428,12 +431,12 @@ Returning to the result of the derivation in Equation \ref{eq:singlelink_pr_sum}
     1 - (\chi^{M-1}) e^{\lambda(\frac{1-\eta}{\chi}-1)}
     }\\[10pt]
     \intertext{Finally, we rewrite $\lambda$ in terms of the sampling fraction ($\rho$) 
-    and $R_{pop}$ as defined above, where $\lambda = \rho(R_{pop}+1)$:}
+    and $R_{\text{pop}}$ as defined above, where $\lambda = \rho(R_{\text{pop}}+1)$:}
     &=
     \frac{
-    1 - e^{-\rho(R_{pop}+1)\eta}
+    1 - e^{-\rho(R_{\text{pop}}+1)\eta}
     }{
-    1 - (\chi^{M-1}) e^{\rho(R_{pop}+1)(\frac{1-\eta}{\chi}-1)}
+    1 - (\chi^{M-1}) e^{\rho(R_{\text{pop}}+1)(\frac{1-\eta}{\chi}-1)}
     }\\[10pt]%\stepcounter{equation}\tag{\theequation}\label{eq:pois_k}
 \end{align*}
 
@@ -442,45 +445,45 @@ As a check on the formulation in the equation above, let $\chi$ equal one, indic
 \begin{equation}
     \Pr(y_{ij} \mid z_{ij})
     = \frac{
-    1 - e^{-\rho(R_{pop}+1)\eta}
+    1 - e^{-\rho(R_{\text{pop}}+1)\eta}
     }{
-    1 - (\chi^{M-1}) e^{\rho(R_{pop}+1)(\frac{1-\eta}{1}-1)}
+    1 - (\chi^{M-1}) e^{\rho(R_{\text{pop}}+1)(\frac{1-\eta}{1}-1)}
     }
     = \frac{
-    1 - e^{-\rho(R_{pop}+1)\eta}
+    1 - e^{-\rho(R_{\text{pop}}+1)\eta}
     }{
-    1 - e^{-\rho(R_{pop}+1)\eta}
+    1 - e^{-\rho(R_{\text{pop}}+1)\eta}
     }
     = 1
 \end{equation}
 
-The equation above shows that---given our assumptions that the linkage criteria will only identify one link for any sample and perfect sensitivity---any identified link will be correct. This is because all negative links will be correctly avoided by definition of perfect specificity, leaving only true infectors as possible links.
+With the assumption of perfect specificity (and our original assumption that the linkage criteria identifies only a single link for a given infection), we find that any identified links will be correct. This is because perfect specificity ensures that all negative links will be correctly avoided, leaving only true infectors as possible links.
 
 \textbf{Therefore, we can conclude that the probability of transmission given linkage, 
 assuming single linkage and assuming $k$ is poisson-distributed, is:}
 
 \begin{equation}\label{eq:singlelink_pois_k}
  \Pr(y_{ij} \mid z_{ij}) = \frac{
-    1 - e^{-\rho(R_{pop}+1)\eta}
+    1 - e^{-\rho(R_{\text{pop}}+1)\eta}
     }{
-    1 - (\chi^{M-1}) e^{\rho(R_{pop}+1)(\frac{1-\eta}{\chi}-1)}
+    1 - (\chi^{M-1}) e^{\rho(R_{\text{pop}}+1)(\frac{1-\eta}{\chi}-1)}
     }
 \end{equation}
 
 \subsection{Calculating the expected number of pairs in the sample}
 \label{subsec:singlelink_pairs}
 
-To calculate the expected number of pairs in the sample under the current assumptions, we start by defining the vector $k_i$, which gives the number of true pairs of case $i$ in a sample of size $M$ (note that this includes the infector of case $i$, as well us any infectees). We then define $K$ as the summation of $k_i$ over all $i$ cases in the sample of size $M$:
+To calculate the expected number of pairs in the sample under the current assumptions, we start by defining the vector $k_i$, which gives the number of true transmission partners of infection $i$ in a sample of size $M$ (note that this includes the infector of $i$, as well us any infectees). We then define $K$ as the summation of $k_i$ over all $i$ infections in the sample:
 $$ K = \sum_{i=1}^{M}{k_i} $$
 
-Therefore, the total number of true pairs in the sample is $\frac{K}{2}$, where $K$ is divided by two because by definition each pair will be counted exactly twice (as part of $k$ pairs of the infector and the $k$ pairs of the infectee). Accounting for the probability that a true transmission pair is identified as true by the linkage criteria $\eta$, the expected number of true pairs in the sample is:
+Therefore, the total number of true pairs in the sample is $\frac{K}{2}$, where $K$ is divided by two because each pair will be counted exactly twice (once as an infector, and once as an infectee, since we do not account for directionality). Accounting for the probability that a true transmission pair is correctly identified by the linkage criteria ($\eta$), the expected number of true pairs in the sample is:
 $$ \mathbb{E}[\text{number of true pairs}] = \mathbb{E}\bigg[\frac{K\eta}{2}\bigg] = \frac{\eta}{2}\times\mathbb{E}[K].$$
 
-Under our assumption that each $k$ is Poisson distributed with rate $\lambda = \rho(R_{pop}+1)$, the sum of all $k$ is also Poisson distributed with rate $M\times\lambda$.
-$$ K \sim {\rm Poisson}\big(M\rho(R_{pop}+1)\big) $$
+Under our assumption that each $k$ is Poisson distributed with rate $\lambda = \rho(R_{\text{pop}}+1)$, the sum of all $k$ is also Poisson distributed with rate $M\times\lambda$.
+$$ K \sim {\rm Poisson}\big(M\rho(R_{\text{pop}}+1)\big) $$
 
-Since the expected value of a Poisson distributed discrete random variable is simply the rate $\lambda$, $M\rho(R_{pop}+1)$ substitutes for $K$ in the expected number of true pairs.
-$$ \mathbb{E}[\text{number of true pairs}] = \frac{\eta}{2}\times\mathbb{E}[K] = \frac{M\rho(R_{pop}+1)\eta}{2}$$
+Since the expected value of a Poisson distributed discrete random variable is simply the rate $\lambda$, $M\rho(R_{\text{pop}}+1)$ substitutes for $K$ in the expected number of true pairs.
+$$ \mathbb{E}[\text{number of true pairs}] = \frac{\eta}{2}\times\mathbb{E}[K] = \frac{M\rho(R_{\text{pop}}+1)\eta}{2}$$
 
 We can then use this to calculate the expected number of observed pairs in the sample, substituting Equation \ref{eq:singlelink_pois_k} for the probability a pair is true:
 
@@ -488,44 +491,44 @@ We can then use this to calculate the expected number of observed pairs in the s
     \mathbb{E}[\text{number of pairs observed}] &= \frac{\mathbb{E}[\text{number of true
     pairs}]}{\Pr(\text{a pair is true})}\\[10pt]
     &= \frac{
-    \big[ \frac{M\rho(R_{pop}+1)\eta}{2} \big]
+    \big[ \frac{M\rho(R_{\text{pop}}+1)\eta}{2} \big]
     }{
     \bigg[ \frac{
-    1 - e^{-\rho(R_{pop}+1)\eta}
+    1 - e^{-\rho(R_{\text{pop}}+1)\eta}
     }{
-    1 - (\chi^{M-1}) e^{\rho(R_{pop}+1)(\frac{1-\eta}{\chi}-1)}
+    1 - (\chi^{M-1}) e^{\rho(R_{\text{pop}}+1)(\frac{1-\eta}{\chi}-1)}
     } \bigg]
     }\\[10pt]
     &= \frac{
-    \big(M\rho (R_{pop}+1)\eta\big)\big(1-(\chi^{M-1})e^{\rho(R_{pop}+1)(\frac{1-\eta}{\chi}-1})\big)
+    \big(M\rho (R_{\text{pop}}+1)\eta\big)\big(1-(\chi^{M-1})e^{\rho(R_{\text{pop}}+1)(\frac{1-\eta}{\chi}-1})\big)
     }{
-    2\big(1-e^{-\rho(R_{pop}+1)\eta}\big)
+    2\big(1-e^{-\rho(R_{\text{pop}}+1)\eta}\big)
     }\\[10pt]
     \intertext{\textbf{Therefore, the expected number of pairs observed, assuming that the 
-    number of transmission links of any case $i$ is Poisson-distributed and single linkage, is:}}
+    number of transmission links of any infection $i$ is Poisson-distributed and single linkage, is:}}
     \mathbb{E}[\text{number of pairs observed}] &= \frac{M}{2}\Big[\frac{
-    \eta\rho (R_{pop}+1)\big(1-(\chi^{M-1})e^{\rho(R_{pop}+1)(\frac{1-\eta}{\chi}-1})\big)
+    \eta\rho (R_{\text{pop}}+1)\big(1-(\chi^{M-1})e^{\rho(R_{\text{pop}}+1)(\frac{1-\eta}{\chi}-1})\big)
     }{
-    1-e^{-\rho(R_{pop}+1)\eta}
+    1-e^{-\rho(R_{\text{pop}}+1)\eta}
     }\Big]
     \stepcounter{equation}\tag{\theequation}
 \end{align*}
 
 \newpage
 
-<!-- RELAXING SINGLE LINKAGE -->
+<!-- APPENDIX D: RELAXING SINGLE LINKAGE -->
 
 \section{Final derivation: multiple transmissions and multiple links}
 
 \subsection{Assumptions}
 
-Here we relax the final assumption that the linkage case only identifies pairs of samples, and allow the linkage criteria to identify multiple links of case $i$. We do, however, assume that linkage events are independent of one another, i.e. linkage of case $i$ to case $j$ has no bearing on linkage of case $i$ to any other sample.
+Here we relax the final assumption that the linkage criteria only identifies pairs of samples, and allow the linkage criteria to identify multiple links of infection $i$. We do, however, assume that linkage events are independent of one another, i.e. linkage of $i$ to $j$ has no bearing on linkage of infection $i$ to any other sampled infection.
 
 \subsection{Derivation of the probability of transmission given linkage}
 
 \textit{Derivation for a given value of $k$}
 
-We begin as we did in section \ref{subsec:singlelink}, by deriving the probability of transmission for a given value of $k$, where $k$ is the number of cases in the sample $M$ that are truly linked with case $i$.
+We begin as we did in section \ref{subsec:singlelink}, by deriving the probability of transmission for a given value of $k$, where $k$ is the number of infections in the sample $M$ that are true transmission partners of infection $i$.
 
 \begin{align*} \label{eq:final_pr_k}
     \Pr(\y \mid \z, k) &= \frac{\Pr(\y, \z, k)}{\Pr(\z, k)}\\[10pt]
@@ -538,15 +541,15 @@ We begin as we did in section \ref{subsec:singlelink}, by deriving the probabili
     &= \frac{\Pr(z_{ij} \mid y_{ij}, k)\Pr(y_{ij} \mid k)}{\Pr(z_{ij} \mid y_{ij}, k)
     \Pr(y_{ij} \mid k)+\Pr(z_{ij} \mid \neg y_{ij}, k)\Pr(\neg y_{ij} \mid k)}\\[10pt]
     \intertext{Given our assumption of independence, the probability that the linkage criteria 
-    correctly links cases $i$ and $j$ (i.e., $\Pr(z_{ij} \mid y_{ij}, k)$ is the sensitivity 
-    of the linkage criteria, or $\eta$. And the probability that $i$ infected $j$ (or vice versa) 
-    is simply the number of true links of case $i$ ($k$) in the sample, over the total number of other cases 
-    in the sample ($M-1$):}
+    correctly links infections $i$ and $j$ (i.e., $\Pr(z_{ij} \mid y_{ij}, k)$) is the sensitivity 
+    of the linkage criteria ($\eta$). And the probability that $j$ is a transmission partner of $i$
+    is simply the number of true partners of $i$ in the sample ($k$), over the total number of other 
+    infections in the sample ($M-1$):}
     &= \frac{\eta \frac{k}{M-1}}{\eta \frac{k}{M-1}+\Pr(z_{ij} \mid \neg y_{ij}, k)\Pr(\neg y_{ij} \mid k)}\\[10pt]
-    \intertext{Similarly, the probability of linking cases $i$ and $j$ given that they are not 
-    a true transmission pair is simply the false positive rate, or ($1-\chi$). 
-    And the probability that $i$ and $j$ did not infect one another is the number of cases 
-    not connected to case $i$ ($M-k-1)$ over the number of other cases in the sample ($M-1)$:}
+    \intertext{Similarly, the probability of linking $i$ and $j$ given that they are not 
+    a true transmission pair ($\Pr(z_{ij}\mid\neg y_{ij},k)$) is simply the false positive rate, or ($1-\chi$).
+    And the probability that $j$ is not a transmission partner of $i$ is the number of 
+    infections not connected to $i$ ($M-k-1)$ over the number of other infections in the sample ($M-1)$:}
     &= \frac{\eta \frac{k}{M-1}}{\eta \frac{k}{M-1}+(1-\chi) \frac{M-k-1}{M-1}}\\[10pt]
     &= \frac{\eta k}{\eta k + (1-\chi)(M-k-1)}\\[15pt]
     \intertext{\textbf{Therefore, the probability of transmission given linkage for a given value of k is:}}
@@ -557,7 +560,7 @@ We begin as we did in section \ref{subsec:singlelink}, by deriving the probabili
 
 \textit{Derivation for all possible values of $k$}
 
-We can extend Equation \ref{eq:final_pr_k} to include all possibilities of $k$ for a given case $i$, again starting as in the previous section:
+We can extend Equation \ref{eq:final_pr_k} to include all possibilities of $k$ for a given infection $i$, again starting as in the previous section:
 
 \begin{align*} \label{eq:final_pr_sum}
     \Pr(y_{ij} \mid z_{ij}) &= \sum_{k=0}^{\infty} \Pr(y_{ij} \mid z_{ij}, k)\Pr(k \mid z_{ij})\\[10pt]
@@ -573,7 +576,7 @@ We can extend Equation \ref{eq:final_pr_k} to include all possibilities of $k$ f
     &= \frac{\sum_{k=0}^{\infty} \Pr(k)\eta k}
     {\sum_{k=0}^{\infty}\Pr(k)[\eta k + (1-\chi)(M-k-1)]}\\[15pt]
     \intertext{\textbf{Therefore, the probability of transmission given linkage for all 
-    possible values of $k$ transmission links in the sample is:}}
+    possible values of $k$ transmission partners in the sample is:}}
     \Pr(y_{ij} \mid z_{ij}) &= \frac{\sum_{k=0}^{\infty} \Pr(k)\eta k}
     {\sum_{k=0}^{\infty}\Pr(k)[\eta k + (1-\chi)(M-k-1)]}
     \stepcounter{equation}\tag{\theequation}\\[10pt]
@@ -581,7 +584,7 @@ We can extend Equation \ref{eq:final_pr_k} to include all possibilities of $k$ f
 
 \textit{Derivation if $k$ is poisson-distributed}
 
-As in the previous section, we calculate the probability of transmission assuming $k$ is poisson-distributed with mean $\lambda = \rho (R+1)$:
+As in the previous section, we calculate the probability of transmission assuming $k$ is poisson-distributed with mean $\lambda = \rho (R_{\text{pop}}+1)$:
 
 \begin{align*} \label{eq:final_pois}
     \Pr(y_{ij} \mid z_{ij}) &= \frac{\sum_{k=0}^{\infty} \Pr(k)\eta k}
@@ -601,27 +604,27 @@ As in the previous section, we calculate the probability of transmission assumin
     &= \frac{\eta \lambda}
     {\eta \lambda + (1-\chi)(M - \lambda - 1)}\\[10pt]
     \intertext{Finally, we rewrite $\lambda$ in terms of the sampling fraction ($\rho$) 
-    and the effective reproductive number ($R_{pop}$) as defined above, where $\lambda = \rho (R_{pop}+1)$:}
-    &= \frac{\eta \rho (R_{pop}+1)}
-    {\eta \rho (R_{pop}+1) + (1-\chi)(M - \rho (R_{pop}+1) - 1)}\\[10pt]
-    \intertext{\textbf{Therefore, we can conclude that the probability of transmission 
+    and the effective reproductive number ($R_{\text{pop}}$):}
+    &= \frac{\eta \rho (R_{\text{pop}}+1)}
+    {\eta \rho (R_{\text{pop}}+1) + (1-\chi)(M - \rho (R_{\text{pop}}+1) - 1)}\\[10pt]
+    \intertext{\textbf{Therefore, the probability of transmission 
     given linkage assuming $k$ is Poisson-distributed is:}}
-    \Pr(y_{ij} \mid z_{ij}) &= \frac{\eta \rho (R_{pop}+1)}
-    {\eta \rho (R_{pop}+1) + (1-\chi)(M - \rho (R_{pop}+1) - 1)}\\
+    \Pr(y_{ij} \mid z_{ij}) &= \frac{\eta \rho (R_{\text{pop}}+1)}
+    {\eta \rho (R_{\text{pop}}+1) + (1-\chi)(M - \rho (R_{\text{pop}}+1) - 1)}\\
     \stepcounter{equation}\tag{\theequation}\\[10pt]
 \end{align*}
 
 \subsubsection{Calculating the expected number of pairs in the sample}
 
-To calculate the expected number of pairs in the sample allowing for multiple transmissions and multiple linkages, we start, as in section \ref{subsec:singlelink_pairs} by defining $K$ as the summation of $k_i$ over all $i$ cases in the sample of size $M$:
+To calculate the expected number of pairs in the sample allowing for multiple transmissions and multiple linkages, we start, as in section \ref{subsec:singlelink_pairs} by defining $K$ as the summation of $k_i$ over all $i$ infections in the sample of size $M$:
 $$ K = \sum_{i=1}^{M}{k_i} $$
 
 Therefore, the total number of true pairs in the sample is $\frac{K}{2}$ and the expected number of true pairs in the sample is:
 $$ \mathbb{E}[\text{number of true pairs}] = \mathbb{E}\bigg[\frac{K\eta}{2}\bigg] = \frac{\eta}{2}\times\mathbb{E}[K].$$
 
-Under our assumption that each $k$ is Poisson distributed with rate $\lambda = \rho(R_{pop}+1)$, the sum of all $k$ is also Poisson distributed with rate $M\times\lambda$. Therefore, $\mathbb{E}[K] = M \times \lambda = M\rho(R_{pop}+1)$:
+Under our assumption that each $k$ is Poisson distributed with rate $\lambda = \rho(R_{\text{pop}}+1)$, the sum of all $k$ is also Poisson distributed with rate $M\times\lambda$. Therefore, $\mathbb{E}[K] = M \times \lambda = M\rho(R_{\text{pop}}+1)$:
 
-$$ \mathbb{E}[\text{number of true pairs}] = \frac{\eta}{2}\times\mathbb{E}[K] = \frac{M\rho(R_{pop}+1)\eta}{2}$$
+$$ \mathbb{E}[\text{number of true pairs}] = \frac{\eta}{2}\times\mathbb{E}[K] = \frac{M\rho(R_{\text{pop}}+1)\eta}{2}$$
 
 We can then use this to calculate the expected number of observed pairs in the sample, substituting Equation \ref{eq:final_pois} for the probability a pair is true:
 
@@ -629,19 +632,19 @@ We can then use this to calculate the expected number of observed pairs in the s
     \mathbb{E}[\text{number of pairs observed}] &= \frac{\mathbb{E}[\text{number of true
     pairs}]}{\Pr(\text{a pair is true})}\\[10pt]
     &= \frac{
-    \big[ \frac{M\rho(R_{pop}+1)\eta}{2} \big]
+    \big[ \frac{M\rho(R_{\text{pop}}+1)\eta}{2} \big]
     }{
-    \bigg[ \frac{\eta \rho (R_{pop}+1)}
-    {\eta \rho (R_{pop}R+1) + (1-\chi)(M - \rho (R_{pop}+1) - 1)}\bigg]
+    \bigg[ \frac{\eta \rho (R_{\text{pop}}+1)}
+    {\eta \rho (R_{\text{pop}}R+1) + (1-\chi)(M - \rho (R_{\text{pop}}+1) - 1)}\bigg]
     }\\[10pt]
     &= \frac{
-    \big[M\rho (R_{pop}+1)\eta][\eta\rho (R_{pop}+1)+(1-\chi)(M-\rho (R_{pop}+1) - 1)\big]
+    \big[M\rho (R_{\text{pop}}+1)\eta][\eta\rho (R_{\text{pop}}+1)+(1-\chi)(M-\rho (R_{\text{pop}}+1) - 1)\big]
     }{
-    2\eta\rho (R_{pop}+1)
+    2\eta\rho (R_{\text{pop}}+1)
     }\\[10pt]
-    &= \frac{M}{2}\big[\eta\rho (R_{pop}+1) + (1-\chi)(M-\rho (R_{pop}+1) - 1)\big]\\[10pt]
+    &= \frac{M}{2}\big[\eta\rho (R_{\text{pop}}+1) + (1-\chi)(M-\rho (R_{\text{pop}}+1) - 1)\big]\\[10pt]
     \intertext{\textbf{Therefore, the expected number of pairs observed assuming that the 
-    number of transmission links of any case $i$ is Poisson-distributed is:}}
-    \mathbb{E}[\text{number of pairs observed}] &= \frac{M}{2}\big[\eta\rho (R_{pop}+1) + (1-\chi)(M-\rho (R_{pop}+1) - 1)\big]
+    number of transmission links of any infection $i$ is Poisson-distributed is:}}
+    \mathbb{E}[\text{number of pairs observed}] &= \frac{M}{2}\big[\eta\rho (R_{\text{pop}}+1) + (1-\chi)(M-\rho (R_{\text{pop}}+1) - 1)\big]
     \stepcounter{equation}\tag{\theequation}
 \end{align*}
