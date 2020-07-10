@@ -37,9 +37,9 @@ Our aim is to determine the quantity $\Pr (y_{ij} \mid z_{ij})$, which is the pr
 
 \appendix
 
-<!-- APPENDIX A: THE SIMPLEST CASE -->
+<!-- APPENDIX A: SINGLE LINK and SINGLE TRUE TRANSMISSION -->
 
-\section{The simplest case}
+\section{Single link, single true transmission, and perfect sensitivity}
 \label{section:simple}
 
 \subsection{Assumptions}
@@ -123,7 +123,7 @@ Under our simplifying assumptions, Equation \ref{eq:simple_obspairs} reveals two
 
 <!-- APPENDIX B: RELAXING PERFECT SENSITIVITY -->
 
-\section{Relaxing perfect sensitivity}
+\section{Single link and single true transmission}
 
 \subsection{Assumptions}
 
@@ -209,7 +209,7 @@ As before (see Equation \ref{eq:simple_obspairs}), when all other parameters are
 
 <!-- APPENDIX C: RELAXING SINGLE TRANSMISSION -->
 
-\section{Relaxing the assumption of single transmission pairs}
+\section{Single link and multiple true transmissions}
 
 \subsection{Assumptions}
 
@@ -518,7 +518,7 @@ We can then use this to calculate the expected number of observed pairs in the s
 
 <!-- APPENDIX D: RELAXING SINGLE LINKAGE -->
 
-\section{Final derivation: multiple transmissions and multiple links}
+\section{Multiple links and multiple true transmissions}
 
 \subsection{Assumptions}
 
