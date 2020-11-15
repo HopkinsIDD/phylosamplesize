@@ -776,3 +776,76 @@ make.error.heatmaps <- function(saved_data,rho,sens,spec,sens_breaks,spec_breaks
   grid.arrange(p_err,p_count,nrow=2)
   
 }
+
+##' Function to make histograms showing deviation between calculated and simulated values
+##'
+##' @param saved_data previously-generated full data frame
+##' @param single_value should only the optimal sens/spec be plotted for each simulation
+
+plot.error.hist <- function(saved_data,single_value){
+  
+  # load saved simulation data
+  load(saved_data)
+  
+  fdr_plots <- vector(mode = "list", length = 4)
+  eta_plots <- vector(mode = "list", length = 4)
+  chi_plots <- vector(mode = "list", length = 4)
+  
+  pal1 = brewer.pal(n = 9, "Blues")[7]
+  pal2 = brewer.pal(n = 9, "Greens")[7]
+  pal3 = brewer.pal(n = 9, "Oranges")[6]
+  pal4 = brewer.pal(n = 9, "Greys")[8]
+  colors <- c(pal1,pal2,pal3,pal4)
+  
+  for (i in 1:4){
+    dat <- data_list[[i]]
+    
+    if (single_value==TRUE){
+      tmp <- dat %>% mutate(corner.dist = sqrt(((1-t.chi)^2)+((1-t.eta)^2)))
+      tmp <- tmp %>% group_by(sim) %>% filter(corner.dist == min(corner.dist)) %>% ungroup()
+      tmp <- data.frame(tmp)
+      dat <- tmp
+    }
+    
+    fdr_plots[[i]] <- ggplot(dat,aes(x=tfdr-fdr.sub)) +
+      geom_histogram(aes(y=..count../sum(..count..)),binwidth=0.01,position="identity",
+                     fill=colors[i],color='white',size=0.2) +
+      scale_x_continuous(expand = c(0,0),limits = c(-0.15,0.15),breaks = c(-0.10,0.00,0.10)) +
+      scale_y_continuous(expand = c(0,0),limits = c(0,1)) +
+      theme_classic() + 
+      theme(legend.position='none',
+            axis.title.x = element_blank(),
+            axis.title.y = element_blank(),
+            axis.text.x = element_text(size=8),
+            axis.text.y = element_text(size=8))
+    
+    eta_plots[[i]] <- ggplot(dat,aes(x=t.eta-eta.full)) +
+      geom_histogram(aes(y=..count../sum(..count..)),binwidth=0.01,position="identity",
+                     fill=colors[i],color='white',size=0.2) +
+      scale_x_continuous(expand = c(0,0),limits = c(-0.15,0.15),breaks = c(-0.10,0.00,0.10)) +
+      scale_y_continuous(expand = c(0,0),limits = c(0,1)) +
+      theme_classic() + 
+      theme(legend.position='none',
+            axis.title.x = element_blank(),
+            axis.title.y = element_blank(),
+            axis.text.x = element_text(size=8),
+            axis.text.y = element_text(size=8))
+    
+    chi_plots[[i]] <- ggplot(dat,aes(x=t.chi-chi.full)) +
+      geom_histogram(aes(y=..count../sum(..count..)),binwidth=0.01,position="identity",
+                     fill=colors[i],color='white',size=0.2) +
+      scale_x_continuous(expand = c(0,0),limits = c(-0.15,0.15),breaks = c(-0.10,0.00,0.10)) +
+      scale_y_continuous(expand = c(0,0),limits = c(0,1)) +
+      theme_classic() + 
+      theme(legend.position='none',
+            axis.title.x = element_blank(),
+            axis.title.y = element_blank(),
+            axis.text.x = element_text(size=8),
+            axis.text.y = element_text(size=8))
+  }
+  
+  # return all plots in order
+  plots <- c(fdr_plots,eta_plots,chi_plots)
+  return(plots)
+  
+}
