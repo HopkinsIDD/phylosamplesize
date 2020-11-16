@@ -47,34 +47,7 @@ mgd <- read.csv("data/sim_distance_dist.csv")
 
 <br>
 
-##### **Figure 1.** Visual derivation of the probability of correctly identifying a true transmission pair
-
-![](../figures/Fig1.png)
-
-<br>
-
-##### **Figure 2.** Sample size and false discovery rate given single linkage and single transmission
-
-<br>
-
-##### A
-```{r plot_stsl, echo=FALSE, eval=TRUE}
-plt.fdr.pairs(chi = 0.999, eta = 0.9, rho.disc = c(0.01,0.05,0.25,0.50,0.75),
-       rho.cont = seq(0.01, 1.00, length.out = 100), M.disc = c(50,100,200,500,1000),
-       M.cont = seq(2,1000), assumption = "stsl")
-```
-
-##### B
-```{r heatmap_roc_stsl, echo=FALSE, eval=TRUE}
-# plot the heatmap for the single link single transmission scenario
-chi <- 1-10^(seq(log10(1-.999999), log10(1-0.9), length.out = 100))
-eta <- seq(0, 1, length.out = 100)
-plt.heatmap.fdr(chi,eta,rho=0.5,M=200,assumption="stsl")
-```
-
-<br>
-
-##### **Figure 3.** Sample size and false discovery rate given multiple linkage and multiple transmissions
+##### **Figure 1.** Sample size and false discovery rate given multiple linkage and multiple transmissions
 
 <br>
 
@@ -102,7 +75,7 @@ plt.heatmap.fdr(chi,eta,rho=0.5,M=200,R=R0,assumption="mtml") +
 
 <br>
 
-##### **Figure 4.** Determining the sensitivity and specificity of a genetic distance cutoff
+##### **Figure 2.** Determining the sensitivity and specificity of a genetic distance cutoff
 
 <br>
 
@@ -131,7 +104,7 @@ plt.gendist.mut(mut_rate = 1, mean_gens_pdf = mean_gens_pdf)
 
 <br>
 
-##### **Figure 5.** Predicted versus observed false discovery rate in outbreak simulations
+##### **Figure 3.** Predicted versus observed false discovery rate in outbreak simulations
 
 <br>
 
@@ -150,7 +123,7 @@ plt.sim.data(simdata="data/full_data_sim.Rdata",rho_values=c(0.1,0.25,0.5,0.75),
 
 <br>
 
-##### **Table 1.** Bias and error of false discovery rate for simulations with fixed sampling proportion
+##### **Table 2.** Bias and error of false discovery rate for simulations with fixed sampling proportion
 
 ```{r res_table_sim, echo=FALSE, fig.width=5.5, fig.height=5, eval=TRUE}
 
@@ -172,7 +145,7 @@ grid.arrange(tbias,tableGrob(bias_table_sim),terror,tableGrob(error_table_sim),n
 
 <br>
 
-##### **Figure 6.** Validation of mutation rate method to calculate sensitivity and specificity
+##### **Figure 4.** Validation of mutation rate method to calculate sensitivity and specificity
 
 ```{r fdr_vs_fdr_mut, echo=FALSE, eval=TRUE}
 
@@ -188,9 +161,9 @@ plt.sim.data(simdata="data/full_data_mutrate.Rdata",rho_values=c(0.1,0.25,0.5,0.
 
 <br>
 
-##### **Figure 6.** Distribution of raw errors using mutation rate method
+##### **Figure 5.** Distribution of raw errors using mutation rate method
 
-```{r error_hist_all, echo=FALSE, eval=TRUE, warning=FALSE}
+```{r error_hist_all, echo=FALSE, fig.width=7.5, fig.height=4, eval=TRUE, warning=FALSE}
 
 err_hists <- plot.error.hist(saved_data="data/full_data_mutrate.Rdata",single_value=FALSE)
 
@@ -212,7 +185,7 @@ grid.arrange(blank,rho10,rho25,rho50,rho75,
 
 <br>
 
-##### **Figure 7.** Effect of different generation distributions on specificity
+##### **Figure 6.** Effect of different generation distributions on specificity
 
 ```{r sens_spec_main, echo=FALSE, eval=TRUE, fig.show = 'hide'}
 

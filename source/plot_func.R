@@ -612,6 +612,13 @@ fdr.make.tables.var <- function(saved_data,var,rho,row_break_by,row_breaks,row_n
   } else if (rho==0.75) { dat <- data_list[[4]]
   } else { stop("not a valid value of rho") }
   
+  # calculate error and bias of sensitivity and specificy
+  # in case we want to plot these values instead of fdr error
+  #dat <- mutate(dat, eta.err = abs(t.eta-eta.full))
+  #dat <- mutate(dat, chi.err = abs(t.chi-chi.full))
+  #dat <- mutate(dat, eta.bias = (t.eta-eta.full))
+  #dat <- mutate(dat, chi.bias = (t.chi-chi.full))
+  
   # subset the entire dataframe using the filtering value
   if (!is.na(filter_by)) { dat <- dat %>% filter(get(filter_by)>=filter_value) }
   
@@ -846,6 +853,63 @@ plot.error.hist <- function(saved_data,single_value){
   
   # return all plots in order
   plots <- c(fdr_plots,eta_plots,chi_plots)
+  return(plots)
+  
+}
+
+##' Function to make histograms showing deviation between calculated and simulated values
+##' this time split up by sample size
+##'
+##' @param saved_data previously-generated full data frame
+##' @param rho proportion sampled
+##' @param col_break_by values to use to split up data
+##' @param col_breaks breakpoints to use for rows
+
+plot.error.hist.breaks <- function(saved_data,rho,col_break_by,col_breaks){
+  
+  # load saved simulation data
+  load(saved_data)
+  
+  # get the data for a specific value of rho
+  if (rho==0.1) { 
+    dat <- data_list[[1]]
+    hist_color <- brewer.pal(n = 9, "Blues")[7]
+  } else if (rho==0.25) { 
+    dat <- data_list[[2]]
+    hist_color <- brewer.pal(n = 9, "Greens")[7]
+  } else if (rho==0.5) { 
+    dat <- data_list[[3]]
+    hist_color <- brewer.pal(n = 9, "Oranges")[6]
+  } else if (rho==0.75) { 
+    dat <- data_list[[4]]
+    hist_color <- brewer.pal(n = 9, "Greys")[8]
+  } else { stop("not a valid value of rho") }
+    
+  plots <- vector(mode = "list", length = (length(col_breaks)-1))
+    
+  for (j in 1:(length(col_breaks)-1)){
+    # start (inclusive) to end (exclusive)
+    if (j<(length(col_breaks)-1)) { 
+      cval <- dat %>% 
+        filter(get(col_break_by)>=col_breaks[j]) %>% filter(get(col_break_by)<col_breaks[j+1]) }
+    # start (inclusive) to end (also inclusive) for last value
+    else { cval <- dat %>% 
+      filter(get(col_break_by)>=col_breaks[j]) %>% filter(get(col_break_by)<=col_breaks[j+1]) }
+    
+    plots[[j]] <- ggplot(cval,aes(x=t.chi-chi.full)) +
+      geom_histogram(aes(y=..count../sum(..count..)),binwidth=0.01,position="identity",
+                     fill=hist_color,color='white',size=0.2) +
+      scale_x_continuous(expand = c(0,0),limits = c(-0.25,0.25),
+                         breaks = c(-0.20,-0.10,0.00,0.10,0.20)) +
+      scale_y_continuous(expand = c(0,0),limits = c(0,0.4)) +
+      theme_classic() + 
+      theme(legend.position='none',
+            axis.title.x = element_blank(),
+            axis.title.y = element_blank(),
+            axis.text.x = element_text(size=8),
+            axis.text.y = element_text(size=8))
+  }
+  
   return(plots)
   
 }
