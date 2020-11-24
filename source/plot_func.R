@@ -861,11 +861,12 @@ plot.error.hist <- function(saved_data,single_value){
 ##' this time split up by sample size
 ##'
 ##' @param saved_data previously-generated full data frame
+##' @param var variable to calculate error for (fdr, sens, spec)
 ##' @param rho proportion sampled
 ##' @param col_break_by values to use to split up data
 ##' @param col_breaks breakpoints to use for rows
 
-plot.error.hist.breaks <- function(saved_data,rho,col_break_by,col_breaks){
+plot.error.hist.breaks <- function(saved_data,var,rho,col_break_by,col_breaks){
   
   # load saved simulation data
   load(saved_data)
@@ -884,6 +885,18 @@ plot.error.hist.breaks <- function(saved_data,rho,col_break_by,col_breaks){
     dat <- data_list[[4]]
     hist_color <- brewer.pal(n = 9, "Greys")[8]
   } else { stop("not a valid value of rho") }
+  
+  # get column names for specific variable
+  if (var=="fdr"){
+    v1="tfdr"
+    v2="fdr.sub"
+  } else if (var=="sens"){
+    v1="t.eta"
+    v2="eta.full"
+  } else if (var=="spec"){
+    v1="t.chi"
+    v2="chi.full"
+  } else { stop("not a valid variable name") }
     
   plots <- vector(mode = "list", length = (length(col_breaks)-1))
     
@@ -896,7 +909,7 @@ plot.error.hist.breaks <- function(saved_data,rho,col_break_by,col_breaks){
     else { cval <- dat %>% 
       filter(get(col_break_by)>=col_breaks[j]) %>% filter(get(col_break_by)<=col_breaks[j+1]) }
     
-    plots[[j]] <- ggplot(cval,aes(x=t.chi-chi.full)) +
+    plots[[j]] <- ggplot(cval,aes(x=get(v1)-get(v2))) +
       geom_histogram(aes(y=..count../sum(..count..)),binwidth=0.01,position="identity",
                      fill=hist_color,color='white',size=0.2) +
       scale_x_continuous(expand = c(0,0),limits = c(-0.25,0.25),

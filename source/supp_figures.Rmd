@@ -59,7 +59,7 @@ plt.heatmap.fdr(chi,eta,rho=0.5,M=200,assumption="stsl")
 
 ##### **Fig S2.** Estimating the average reproductive number in a population
 
-![](../figures/FigS1.png)
+![](../figures/FigS2.png)
 
 <br>
 
@@ -315,7 +315,47 @@ plt.sim.data(simdata="data/full_data_mutrate.Rdata",rho_values=c(0.1,0.25,0.5,0.
 
 <br>
 
-##### **Fig S9.** Predicted versus observed false discovery rate using actual generation distribution
+##### **Fig S9** Error of specificity calculation using mutation rate method by sample size and proportion
+
+```{r error_hist_mut_samplesize_spec, echo=FALSE, fig.width=7.5, fig.height=6, eval=TRUE}
+
+rho = 0.1
+col_breaks = c(0,0.25,0.5,0.75,1.0)*max_sim_size*rho
+col_names = c("0-50","50-100","100-150","150-200")
+err_hists_rho10 <- plot.error.hist.breaks(
+  saved_data="data/full_data_mutrate.Rdata",
+  var="spec",rho=rho,col_break_by="M",col_breaks=col_breaks)
+
+rho = 0.25
+col_breaks = c(0,0.25,0.5,0.75,1.0)*max_sim_size*rho
+col_names = c("0-125","125-250","250-375","375-500")
+err_hists_rho25 <- plot.error.hist.breaks(
+  saved_data="data/full_data_mutrate.Rdata",
+  var="spec",rho=rho,col_break_by="M",col_breaks=col_breaks)
+
+rho = 0.5
+col_breaks = c(0,0.25,0.5,0.75,1.0)*max_sim_size*rho
+col_names = c("0-250","250-500","500-750","750-1000")
+err_hists_rho50 <- plot.error.hist.breaks(
+  saved_data="data/full_data_mutrate.Rdata",
+  var="spec",rho=rho,col_break_by="M",col_breaks=col_breaks)
+
+rho = 0.75
+col_breaks = c(0,0.25,0.5,0.75,1.0)*max_sim_size*rho
+col_names = c("0-375","375-750","750-1125","1125-1500")
+err_hists_rho75 <- plot.error.hist.breaks(
+  saved_data="data/full_data_mutrate.Rdata",
+  var="spec",rho=rho,col_break_by="M",col_breaks=col_breaks)
+
+plots <- c(err_hists_rho10,err_hists_rho25,err_hists_rho50,err_hists_rho75)
+
+grid.arrange(grobs=plots,ncol=4,as.table=FALSE)
+
+```
+
+<br>
+
+##### **Fig S10.** Predicted versus observed false discovery rate using actual generation distribution
 
 ```{r fdr_vs_fdr_gens, echo=FALSE, eval=TRUE}
 
@@ -409,39 +449,5 @@ grid.arrange(trho10,tableGrob(error_table_ss_rho10),
              trho25,tableGrob(error_table_ss_rho25),
              trho50,tableGrob(error_table_ss_rho50),
              trho75,tableGrob(error_table_ss_rho75),nrow=8,heights=c(1,7,1,7,1,7,1,7))
-
-```
-
-```{r error_hist_mut_samplesize_spec, echo=FALSE, fig.width=7.5, fig.height=6, eval=FALSE}
-
-##### **Fig SN** Error of sensitivity calculation using mutation rate method by sample size
-
-rho = 0.1
-col_breaks = c(0,0.25,0.5,0.75,1.0)*max_sim_size*rho
-col_names = c("0-50","50-100","100-150","150-200")
-err_hists_rho10 <- plot.error.hist.breaks(
-  saved_data="data/full_data_mutrate.Rdata",rho=rho,col_break_by="M",col_breaks=col_breaks)
-
-rho = 0.25
-col_breaks = c(0,0.25,0.5,0.75,1.0)*max_sim_size*rho
-col_names = c("0-125","125-250","250-375","375-500")
-err_hists_rho25 <- plot.error.hist.breaks(
-  saved_data="data/full_data_mutrate.Rdata",rho=rho,col_break_by="M",col_breaks=col_breaks)
-
-rho = 0.5
-col_breaks = c(0,0.25,0.5,0.75,1.0)*max_sim_size*rho
-col_names = c("0-250","250-500","500-750","750-1000")
-err_hists_rho50 <- plot.error.hist.breaks(
-  saved_data="data/full_data_mutrate.Rdata",rho=rho,col_break_by="M",col_breaks=col_breaks)
-
-rho = 0.75
-col_breaks = c(0,0.25,0.5,0.75,1.0)*max_sim_size*rho
-col_names = c("0-375","375-750","750-1125","1125-1500")
-err_hists_rho75 <- plot.error.hist.breaks(
-  saved_data="data/full_data_mutrate.Rdata",rho=rho,col_break_by="M",col_breaks=col_breaks)
-
-plots <- c(err_hists_rho10,err_hists_rho25,err_hists_rho50,err_hists_rho75)
-
-grid.arrange(grobs=plots,ncol=4,as.table=FALSE)
 
 ```
