@@ -111,7 +111,7 @@ plt.gendist.mut(mut_rate = 1, mean_gens_pdf = mean_gens_pdf)
 ```{r fdr_vs_fdr_sim, echo=FALSE, eval=TRUE}
 
 # first time only: calculate tfdr from simulations and save to file
-#calc.tfdr(simdata="data/simdata_var_N10000",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
+#calc.tfdr(simdata="data/simdata_var_gen_N10000",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
 #          sens_spec_method="sim",mgd=mgd,outdir="data/full_data_sim.Rdata")
 
 # plot fdr with sensitivity and specificity calculated from simulations
@@ -150,7 +150,7 @@ grid.arrange(tbias,tableGrob(bias_table_sim),terror,tableGrob(error_table_sim),n
 ```{r fdr_vs_fdr_mut, echo=FALSE, eval=TRUE}
 
 # first time only: calculate tfdr from simulations and save to file
-#calc.tfdr(simdata="data/simdata_var_N10000",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
+#calc.tfdr(simdata="data/simdata_var_gen_N10000",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
 #          sens_spec_method="mutrate",mgd=mgd,outdir="data/full_data_mutrate.Rdata")
 
 # plot fdr with sensitivity and specificity calculated from simulations
