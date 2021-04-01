@@ -25,7 +25,7 @@ options(tinytex.verbose = TRUE)
 \fancyfoot[R]{\thepage}
 
 \begin{Large}
-\textbf{Supplementary Text 2}\vspace{4px}
+\textbf{Text S2}\vspace{4px}
 \newline
 Determining the sensitivity and specificity of genetic distance as a linkage criteria
 \end{Large}

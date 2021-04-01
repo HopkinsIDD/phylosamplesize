@@ -25,7 +25,7 @@ options(tinytex.verbose = TRUE)
 \fancyfoot[R]{\thepage}
 
 \begin{Large}
-\textbf{Supplementary Text 1}\vspace{4px}
+\textbf{Text S1}\vspace{4px}
 \newline
 Deriving probability of transmission given linkage
 \vspace{10px}
@@ -89,7 +89,7 @@ The probability spaces in Equation \ref{eq:simple_pr} above can also be represen
 Given the number of pairs identified from the linkage criteria, the expected number of those pairs that represent true transmission pairs is:
 $$
 \mathbb{E}[\text{number of true pairs}] = 
-\mathbb{E}[\text{Number of pairs observed}] \times \Pr(\text{a pair is true}).
+\mathbb{E}[\text{Number of pairs observed}] \times \Pr(\text{an observed pair is true}).
 $$
 We have defined $\rho$ as the probability of selecting any individual from the population $N$. Therefore, if we assume a large population size, the probability of sampling both infection $i$ and its true transmission partner is equal to $\rho^2$. Under our first assumption---that $i$ is linked by transmission to only one other infection $j$---the total number of pairs in the population is equal to $\frac{N}{2}$. We also know that $\rho=\frac{M}{N}$, so the total number of true transmission pairs in the sample is:
 
@@ -98,11 +98,11 @@ We have defined $\rho$ as the probability of selecting any individual from the p
     \label{eq:simple_truepairs}
 \end{equation}
 
-Rearranging and substituting Equation \ref{eq:simple_pr} for $\Pr(\text{a pair is true})$:
+Rearranging and substituting Equation \ref{eq:simple_pr} for $\Pr(\text{an observed pair is true})$:
 
 \begin{align*}\label{eq:simple_obspairs}
     \mathbb{E}[\text{number of pairs observed}] 
-    &= \frac{\mathbb{E}[\text{number of true pairs}]}{\Pr(\text{a pair is true})}\\[10pt]
+    &= \frac{\mathbb{E}[\text{number of true pairs}]}{\Pr(\text{an observed pair is true})}\\[10pt]
     &= \frac{\frac{M}{2} \rho}{\rho/\big[\rho + (1-\chi^{M-1})(1-\rho)\big]}\\[10pt]
     &= \frac{M}{2} \big[\rho + (1-\chi^{M-1})(1-\rho)\big]
     \intertext{\textbf{Therefore, the expected number of pairs observed assuming perfect sensitivity, 
@@ -192,7 +192,7 @@ Where the probability that an infection and its transmission partner are both in
 
 \begin{align*}\label{eq:singletrans_singlelink_obspairs}
     \mathbb{E}[\text{number of pairs observed}] 
-    &= \frac{\mathbb{E}[\text{number of true pairs}]}{\Pr(\text{a pair is true})}\\[10pt]
+    &= \frac{\mathbb{E}[\text{number of true pairs}]}{\Pr(\text{an observed pair is true})}\\[10pt]
     &= \frac{\frac{M}{2} \eta\rho}{\eta\rho/\big[\eta\rho +
     \rho(1-\eta)(1-\chi^{M-2}) + (1-\rho)(1-\chi ^{M-1})\big]}\\[10pt]
     &= \frac{M}{2} \big[\eta\rho + \rho(1-\eta)(1-\chi^{M-2}) + (1-\rho)(1-\chi ^{M-1})\big]\\[15pt]
@@ -485,11 +485,11 @@ $$ K \sim {\rm Poisson}\big(M\rho(R_{\text{pop}}+1)\big) $$
 Since the expected value of a Poisson distributed discrete random variable is simply the rate $\lambda$, $M\rho(R_{\text{pop}}+1)$ substitutes for $K$ in the expected number of true pairs.
 $$ \mathbb{E}[\text{number of true pairs}] = \frac{\eta}{2}\times\mathbb{E}[K] = \frac{M\rho(R_{\text{pop}}+1)\eta}{2}$$
 
-We can then use this to calculate the expected number of observed pairs in the sample, substituting Equation \ref{eq:singlelink_pois_k} for the probability a pair is true:
+We can then use this to calculate the expected number of observed pairs in the sample, substituting Equation \ref{eq:singlelink_pois_k} for the probability an observed pair is true:
 
 \begin{align*}
     \mathbb{E}[\text{number of pairs observed}] &= \frac{\mathbb{E}[\text{number of true
-    pairs}]}{\Pr(\text{a pair is true})}\\[10pt]
+    pairs}]}{\Pr(\text{an observed pair is true})}\\[10pt]
     &= \frac{
     \big[ \frac{M\rho(R_{\text{pop}}+1)\eta}{2} \big]
     }{
@@ -626,11 +626,11 @@ Under our assumption that each $k$ is Poisson distributed with rate $\lambda = \
 
 $$ \mathbb{E}[\text{number of true pairs}] = \frac{\eta}{2}\times\mathbb{E}[K] = \frac{M\rho(R_{\text{pop}}+1)\eta}{2}$$
 
-We can then use this to calculate the expected number of observed pairs in the sample, substituting Equation \ref{eq:final_pois} for the probability a pair is true:
+We can then use this to calculate the expected number of observed pairs in the sample, substituting Equation \ref{eq:final_pois} for the probability an observed pair is true:
 
 \begin{align*}
     \mathbb{E}[\text{number of pairs observed}] &= \frac{\mathbb{E}[\text{number of true
-    pairs}]}{\Pr(\text{a pair is true})}\\[10pt]
+    pairs}]}{\Pr(\text{an observed pair is true})}\\[10pt]
     &= \frac{
     \big[ \frac{M\rho(R_{\text{pop}}+1)\eta}{2} \big]
     }{
