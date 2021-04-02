@@ -111,8 +111,8 @@ plt.gendist.mut(mut_rate = 1, mean_gens_pdf = mean_gens_pdf)
 ```{r fdr_vs_fdr_sim, echo=FALSE, eval=TRUE}
 
 # first time only: calculate tfdr from simulations and save to file
-#calc.tfdr(simdata="data/simdata_var_gen_N10000",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
-#          sens_spec_method="sim",mgd=mgd,outdir="data/full_data_sim.Rdata")
+calc.tfdr(simdata="data/simdata_var_gen_N10000",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
+          sens_spec_method="sim",mgd=mgd,outdir="data/full_data_sim.Rdata")
 
 # plot fdr with sensitivity and specificity calculated from simulations
 plt.sim.data(simdata="data/full_data_sim.Rdata",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
@@ -150,8 +150,8 @@ grid.arrange(tbias,tableGrob(bias_table_sim),terror,tableGrob(error_table_sim),n
 ```{r fdr_vs_fdr_mut, echo=FALSE, eval=TRUE}
 
 # first time only: calculate tfdr from simulations and save to file
-#calc.tfdr(simdata="data/simdata_var_gen_N10000",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
-#          sens_spec_method="mutrate",mgd=mgd,outdir="data/full_data_mutrate.Rdata")
+calc.tfdr(simdata="data/simdata_var_gen_N10000",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
+          sens_spec_method="mutrate",mgd=mgd,outdir="data/full_data_mutrate.Rdata")
 
 # plot fdr with sensitivity and specificity calculated from simulations
 plt.sim.data(simdata="data/full_data_mutrate.Rdata",rho_values=c(0.1,0.25,0.5,0.75),max_sim_size=2000,
@@ -199,8 +199,8 @@ for (i in 1:4){
   mgd_list[[i]] <- read.csv(simpath)
   }
 
-#calc.tfdr(simdata="data/simdata_var_gen_N10000",rho_values=rho_values,max_sim_size=2000,
-#          sens_spec_method="mutrate",mgd=mgd_list,mgd_type="sim",outdir="data/full_data_mutrate_gens.Rdata")
+calc.tfdr(simdata="data/simdata_var_gen_N10000",rho_values=rho_values,max_sim_size=2000,
+          sens_spec_method="mutrate",mgd=mgd_list,mgd_type="sim",outdir="data/full_data_mutrate_gens.Rdata")
 
 # plot specificity from mutrate data
 p_mutrate_spec <- plt.sim.data(simdata="data/full_data_mutrate.Rdata",rho_values=0.75,max_sim_size=2000,
